@@ -14,7 +14,12 @@ public:
     bool register_socket_in_iocp_handle(SOCKET socket);
 
     void iocp_thread_work();
-public:
+
+    virtual void OnConnect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void OnAccept(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void OnRecv(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void OnSend(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void OnDisconnect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
 
 private:
     bool m_is_running;

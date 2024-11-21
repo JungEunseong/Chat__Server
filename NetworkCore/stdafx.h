@@ -11,3 +11,4 @@
 #include <functional>
 
 #include "Network/iTask.h"
+#include "Network/NetworkIO.h"

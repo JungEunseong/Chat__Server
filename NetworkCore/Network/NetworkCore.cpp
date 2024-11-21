@@ -7,7 +7,7 @@ NetworkCore::NetworkCore()
     m_iocp_handle = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, 0);
     if(nullptr == m_iocp_handle)
     {
-        // 크래시
+        // TODO: 크래시
         return;
     }
 }
@@ -27,9 +27,36 @@ void NetworkCore::iocp_thread_work()
 {
     while(m_is_running == true)
     {
-        DWORD iocp_size = 0;
+        DWORD bytes_transferred = 0;
         ULONG_PTR key = 0;
-        LPOVERLAPPED* tmp = nullptr;
-        const BOOL result = ::GetQueuedCompletionStatus(m_iocp_handle, &iocp_size, &key, tmp, INFINITE);
+        std::shared_ptr<NetworkIO> io = nullptr;
+        if(false == ::GetQueuedCompletionStatus(m_iocp_handle, &bytes_transferred, &key, reinterpret_cast<LPOVERLAPPED*>(io.get()), INFINITE))
+        {
+            const int err_no = ::WSAGetLastError();
+            // TODO: error log
+        }
+
+        switch(io->GetType())
+        {
+        case IoType::CONNECT:
+            OnConnect(bytes_transferred, io);
+            break;
+        case IoType::DISCONNECT:
+            OnDisconnect(bytes_transferred, io);
+            break;
+        case IoType::ACCEPT:
+            OnAccept(bytes_transferred, io);
+            break;
+        case IoType::RECV:
+            OnRecv(bytes_transferred, io);
+            break;
+        case IoType::SEND:
+            OnSend(bytes_transferred, io);
+            break;
+        default:
+            // TODO: error log
+            break;
+        }
+        
     }
 }

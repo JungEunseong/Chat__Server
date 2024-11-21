@@ -6,7 +6,7 @@ enum IoType
     DISCONNECT,
     ACCEPT,
     RECV,
-    WRITE,
+    SEND,
 };
 
 struct NetworkIO : public OVERLAPPED
@@ -20,6 +20,8 @@ public:
         ::memset(this,0, sizeof(OVERLAPPED));
     }
 
+public:
+    IoType GetType() { return io_type; }
 private:
     IoType io_type;
 };
