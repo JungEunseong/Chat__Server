@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "NetworkCore.h"
 
 NetworkCore::NetworkCore()
     :m_iocp_handle(nullptr)
@@ -7,7 +6,7 @@ NetworkCore::NetworkCore()
     m_iocp_handle = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, 0);
     if(nullptr == m_iocp_handle)
     {
-        // TODO: 크래시
+        // TODO: Crash
         return;
     }
 }
@@ -29,8 +28,8 @@ void NetworkCore::iocp_thread_work()
     {
         DWORD bytes_transferred = 0;
         ULONG_PTR key = 0;
-        std::shared_ptr<NetworkIO> io = nullptr;
-        if(false == ::GetQueuedCompletionStatus(m_iocp_handle, &bytes_transferred, &key, reinterpret_cast<LPOVERLAPPED*>(io.get()), INFINITE))
+        NetworkIO* io = nullptr;
+        if(false == ::GetQueuedCompletionStatus(m_iocp_handle, &bytes_transferred, &key, reinterpret_cast<LPOVERLAPPED*>(io), INFINITE))
         {
             const int err_no = ::WSAGetLastError();
             // TODO: error log
@@ -57,6 +56,5 @@ void NetworkCore::iocp_thread_work()
             // TODO: error log
             break;
         }
-        
     }
 }

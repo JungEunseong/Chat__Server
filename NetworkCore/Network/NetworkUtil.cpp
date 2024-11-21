@@ -1,15 +1,11 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "NetworkUtil.h"
-
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#include "NetworkCore.h"
-#include "NetworkIO.h"
 
 bool NetworkUtil::bind(SOCKET socket, const char* ip, int port)
 {
     sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(ip);
+    inet_pton(AF_INET, ip, &(addr.sin_addr.s_addr));
     addr.sin_port = htons(port);
     
     if(FALSE == ::bind(socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)))
@@ -57,7 +53,7 @@ bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET sock
     
     sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(io->ip.c_str());
+    inet_pton(AF_INET, io->ip.c_str(), &(addr.sin_addr.s_addr));
     addr.sin_port = htons(io->port);
     
     if(false == ::WSAConnect(socket,reinterpret_cast<sockaddr*>(&addr), sizeof(addr), nullptr, nullptr, nullptr, nullptr))

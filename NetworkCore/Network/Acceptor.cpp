@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "Acceptor.h"
 
 void Acceptor::set_address(const char* ip, int port)

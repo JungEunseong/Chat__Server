@@ -9,7 +9,7 @@ enum IoType
     SEND,
 };
 
-struct NetworkIO : public OVERLAPPED
+class NetworkIO : public OVERLAPPED
 {
 public:
     NetworkIO(IoType type) : io_type(type){ Init(); }
@@ -26,7 +26,7 @@ private:
     IoType io_type;
 };
 
-struct AcceptIO : public NetworkIO
+class AcceptIO : public NetworkIO
 {
 public:
     AcceptIO() : NetworkIO(IoType::ACCEPT) { }
@@ -36,7 +36,7 @@ public:
     
 };
 
-struct ConnectIO : public NetworkIO
+class ConnectIO : public NetworkIO
 {
 public:
     ConnectIO() : NetworkIO(IoType::CONNECT) { }
