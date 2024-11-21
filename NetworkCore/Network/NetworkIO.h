@@ -33,3 +33,12 @@ public:
     char m_accept_buffer[1024];
     
 };
+
+struct ConnectIO : public NetworkIO
+{
+public:
+    ConnectIO() : NetworkIO(IoType::CONNECT) { }
+
+    std::string ip;
+    int port;
+};

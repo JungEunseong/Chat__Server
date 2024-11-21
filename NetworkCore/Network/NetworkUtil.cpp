@@ -50,3 +50,26 @@ bool NetworkUtil::accept(std::shared_ptr<NetworkCore> network_core, SOCKET liste
     
 	return true;
 }
+
+bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET socket, std::shared_ptr<ConnectIO> io)
+{
+    network_core->register_socket_in_iocp_handle(socket);
+    
+    sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_addr.s_addr = inet_addr(io->ip.c_str());
+    addr.sin_port = htons(io->port);
+    
+    if(false == ::WSAConnect(socket,reinterpret_cast<sockaddr*>(&addr), sizeof(addr), nullptr, nullptr, nullptr, nullptr))
+    {
+        const int err_no = ::WSAGetLastError();
+        if(WSA_IO_PENDING != err_no)
+        {
+            // TODO: Error LOG
+            return false;
+        }
+    }
+
+    return true;
+}
+
