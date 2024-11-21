@@ -15,11 +15,11 @@ public:
 
     void iocp_thread_work();
 
-    virtual void OnConnect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
-    virtual void OnAccept(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
-    virtual void OnRecv(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
-    virtual void OnSend(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
-    virtual void OnDisconnect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void on_connect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void on_accept(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void on_recv(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void on_send(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
+    virtual void on_disconnect(int bytes_transferred, std::shared_ptr<NetworkIO> io) abstract;
 
 private:
     bool m_is_running;

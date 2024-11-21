@@ -39,19 +39,19 @@ void NetworkCore::iocp_thread_work()
         switch(io->GetType())
         {
         case IoType::CONNECT:
-            OnConnect(bytes_transferred, io);
+            on_connect(bytes_transferred, io);
             break;
         case IoType::DISCONNECT:
-            OnDisconnect(bytes_transferred, io);
+            on_disconnect(bytes_transferred, io);
             break;
         case IoType::ACCEPT:
-            OnAccept(bytes_transferred, io);
+            on_accept(bytes_transferred, io);
             break;
         case IoType::RECV:
-            OnRecv(bytes_transferred, io);
+            on_recv(bytes_transferred, io);
             break;
         case IoType::SEND:
-            OnSend(bytes_transferred, io);
+            on_send(bytes_transferred, io);
             break;
         default:
             // TODO: error log
