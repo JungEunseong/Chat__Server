@@ -15,3 +15,4 @@
 #include "Network/iTask.h"
 #include "Network/NetworkIO.h"
 #include "Network/NetworkCore.h"
+#include "RecvBuffer.h"

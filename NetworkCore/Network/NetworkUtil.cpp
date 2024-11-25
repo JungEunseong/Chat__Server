@@ -53,8 +53,8 @@ bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET sock
     
     sockaddr_in addr;
     addr.sin_family = AF_INET;
-    inet_pton(AF_INET, io->ip.c_str(), &(addr.sin_addr.s_addr));
-    addr.sin_port = htons(io->port);
+    inet_pton(AF_INET, io->m_ip.c_str(), &(addr.sin_addr.s_addr));
+    addr.sin_port = htons(io->m_port);
     
     if(false == ::WSAConnect(socket,reinterpret_cast<sockaddr*>(&addr), sizeof(addr), nullptr, nullptr, nullptr, nullptr))
     {

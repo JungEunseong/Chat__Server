@@ -25,6 +25,8 @@
     <ClInclude Include="Network\NetworkCore.h" />
     <ClInclude Include="Network\NetworkIO.h" />
     <ClInclude Include="Network\NetworkUtil.h" />
+    <ClInclude Include="Network\RecvBuffer.h" />
+    <ClInclude Include="Network\Session.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +110,8 @@
     </ClCompile>
     <ClCompile Include="Network\NetworkIO.cpp" />
     <ClCompile Include="Network\NetworkUtil.cpp" />
+    <ClCompile Include="Network\RecvBuffer.cpp" />
+    <ClCompile Include="Network\Session.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

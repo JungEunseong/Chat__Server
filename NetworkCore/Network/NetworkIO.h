@@ -41,6 +41,6 @@ class ConnectIO : public NetworkIO
 public:
     ConnectIO() : NetworkIO(IoType::CONNECT) { }
 
-    std::string ip;
-    int port;
+    std::string m_ip;
+    int m_port;
 };
