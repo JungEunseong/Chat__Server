@@ -8,6 +8,9 @@
     <ClInclude Include="Network\NetworkIO.h" />
     <ClInclude Include="Network\NetworkUtil.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Network\Packet.h" />
+    <ClInclude Include="Network\RecvBuffer.h" />
+    <ClInclude Include="Network\Session.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Network\Acceptor.cpp" />
@@ -17,5 +20,9 @@
     <ClCompile Include="Network\NetworkIO.cpp" />
     <ClCompile Include="Network\NetworkUtil.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Network\Packet.cpp" />
+    <ClCompile Include="Network\RecvBuffer.cpp" />
+    <ClCompile Include="Network\Session.cpp" />
   </ItemGroup>
 </Project>

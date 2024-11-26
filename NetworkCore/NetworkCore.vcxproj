@@ -25,6 +25,7 @@
     <ClInclude Include="Network\NetworkCore.h" />
     <ClInclude Include="Network\NetworkIO.h" />
     <ClInclude Include="Network\NetworkUtil.h" />
+    <ClInclude Include="Network\Packet.h" />
     <ClInclude Include="Network\RecvBuffer.h" />
     <ClInclude Include="Network\Session.h" />
     <ClInclude Include="stdafx.h" />
@@ -110,6 +111,7 @@
     </ClCompile>
     <ClCompile Include="Network\NetworkIO.cpp" />
     <ClCompile Include="Network\NetworkUtil.cpp" />
+    <ClCompile Include="Network\Packet.cpp" />
     <ClCompile Include="Network\RecvBuffer.cpp" />
     <ClCompile Include="Network\Session.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -183,7 +185,7 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -204,7 +206,7 @@
       </AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAs>Default</CompileAs>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -220,12 +222,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -246,7 +248,7 @@
       </AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <CompileAs>Default</CompileAs>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

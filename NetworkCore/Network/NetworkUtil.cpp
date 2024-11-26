@@ -10,7 +10,7 @@ bool NetworkUtil::bind(SOCKET socket, const char* ip, int port)
     
     if(FALSE == ::bind(socket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)))
     {
-        // TODO: 오류 LOG
+        // TODO: ERROR LOG
         return false;
     }
 
