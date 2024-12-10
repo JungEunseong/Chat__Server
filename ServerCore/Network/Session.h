@@ -1,4 +1,5 @@
-﻿#pragma once
+#pragma once
+#include "RecvBuffer.h"
 
 class Session
 {

@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "pch.h"
 #include "iChannel.h"
 
 iChannel::iChannel(int channel_no)
