@@ -25,9 +25,11 @@
     <ClCompile Include="Network\iTask.cpp" />
     <ClCompile Include="Network\NetworkCore.cpp" />
     <ClCompile Include="Network\NetworkIO.cpp" />
+    <ClCompile Include="Network\NetworkSection.cpp" />
     <ClCompile Include="Network\NetworkUtil.cpp" />
     <ClCompile Include="Network\Packet.cpp" />
     <ClCompile Include="Network\RecvBuffer.cpp" />
+    <ClCompile Include="Network\ServerBase.cpp" />
     <ClCompile Include="Network\Session.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -42,11 +44,12 @@
     <ClInclude Include="Network\iTask.h" />
     <ClInclude Include="Network\NetworkCore.h" />
     <ClInclude Include="Network\NetworkIO.h" />
+    <ClInclude Include="Network\NetworkSection.h" />
     <ClInclude Include="Network\NetworkUtil.h" />
     <ClInclude Include="Network\Packet.h" />
     <ClInclude Include="Network\RecvBuffer.h" />
+    <ClInclude Include="Network\ServerBase.h" />
     <ClInclude Include="Network\Session.h" />
-    <ClInclude Include="Network\stdafx.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

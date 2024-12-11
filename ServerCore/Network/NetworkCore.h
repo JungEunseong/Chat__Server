@@ -19,8 +19,11 @@ public:
     virtual void on_send(int bytes_transferred, NetworkIO* io) = 0;
     virtual void on_disconnect(int bytes_transferred, NetworkIO* io) = 0;
 
+public:
+    bool is_running() { return m_is_running; }
+    
 private:
-    bool m_is_running;
+    std::atomic<bool> m_is_running;
     HANDLE m_iocp_handle;
     
     std::vector<std::thread> m_threads;
