@@ -1,25 +1,29 @@
 ﻿#pragma once
 
+struct PacketHeader
+{
+    unsigned short packet_size;
+    unsigned short protocol_no;
+};
+
+enum
+{
+    PACKET_MAX_SIZE = 65535,
+    PACKET_SIZE_SIZEOF = sizeof(unsigned short),
+    PACKET_PROTOCOL_SIZEOF = sizeof(unsigned short),
+    PACKET_HEADER_SIZEOF = sizeof(struct PacketHeader),
+};
+
 class Packet
 {
-    
-    struct PacketHeader
-    {
-        unsigned short packet_size;
-        unsigned short protocol_no;
-    };
-
-    enum
-    {
-        PACKET_MAX_SIZE = 65535,
-        PACKET_SIZE_SIZEOF = sizeof(unsigned short),
-        PACKET_PROTOCOL_SIZEOF = sizeof(unsigned short),
-        PACKET_HEADER_SIZEOF = sizeof(struct PacketHeader),
-    };
 
 public:
     Packet();
     ~Packet();
+
+    void set_packet(char* data, int size);
+    void set_owner(std::shared_ptr<class Session> session);
+    std::shared_ptr<Session> get_owner(); 
 public:
 
     void initialize(unsigned short protocol_no) { *(static_cast<unsigned short*>(get_protocol_ptr())) = protocol_no; }
@@ -95,7 +99,9 @@ private:
 
 private:
     std::vector<char> m_buffer;
-
     int m_current_idx;
+
+    // For Read 
+    std::shared_ptr<class Session> m_owner;
 };
 

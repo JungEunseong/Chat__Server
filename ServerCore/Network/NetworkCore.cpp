@@ -11,6 +11,11 @@ NetworkCore::NetworkCore()
     }
 }
 
+NetworkCore::~NetworkCore()
+{
+    
+}
+
 void NetworkCore::init(int iocp_thread_count)
 {
     for(int i = 0; i < iocp_thread_count; ++i)

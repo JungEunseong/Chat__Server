@@ -13,14 +13,23 @@ class NetworkSection
 public:
     NetworkSection();
     ~NetworkSection();
+    
 public:
-    void section_thread_work();
+    static unsigned int generate_section_id();
+
+    unsigned int get_id() const { return m_section_id; }
+public:
+    void push_task(std::shared_ptr<iTask> task);
     
 private:
+    void section_thread_work();
+
+private:
+    unsigned int m_section_id;
 
     std::shared_ptr<class ServerBase> m_owner; 
     std::thread m_section_thread;
-    std::map<int, std::shared_ptr<Session>> m_sessions;
+    std::map<unsigned int, std::shared_ptr<Session>> m_sessions;
     
     Concurrency::concurrent_priority_queue<std::shared_ptr<iTask>, task_cmp> m_task_queue;
 };

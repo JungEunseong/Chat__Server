@@ -44,3 +44,11 @@ public:
     std::string m_ip;
     int m_port;
 };
+
+class RecvIO : public NetworkIO
+{
+public:
+    RecvIO() : NetworkIO(IoType::RECV) { }
+
+    std::shared_ptr<class Session> m_session;
+};
