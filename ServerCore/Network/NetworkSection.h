@@ -13,6 +13,8 @@ class NetworkSection
 public:
     NetworkSection();
     ~NetworkSection();
+public:
+    void init(int section_id);
     
 public:
     static unsigned int generate_section_id();

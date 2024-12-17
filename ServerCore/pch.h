@@ -15,6 +15,7 @@
 #include <functional>
 #include <chrono>
 
+#include "Network/NetworkUtil.h"
 #include "Network/Packet.h"
 #include "Network/iTask.h"
 #include "Network/NetworkIO.h"

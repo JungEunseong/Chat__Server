@@ -21,9 +21,8 @@ public:
 public:
     bool is_running() { return m_is_running; }
 
-private:
+protected:
     void iocp_thread_work();
-private:
     std::atomic<bool> m_is_running;
     HANDLE m_iocp_handle;
     

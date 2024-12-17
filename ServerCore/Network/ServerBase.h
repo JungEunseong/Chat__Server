@@ -2,8 +2,14 @@
 
 class ServerBase : public NetworkCore
 {
+public:
     ServerBase();
     virtual ~ServerBase();
+    
+public:
+    void init(int iocp_thread_count = 1, int section_count = 1);
+    void open(std::string open_ip, int open_port,  int accpet_back_log = 1);
+
 public:
     void on_connect(int bytes_transferred, NetworkIO* io) override;
     void on_accept(int bytes_transferred, NetworkIO* io) override;
@@ -15,6 +21,7 @@ private:
     void central_thread_work(); 
     
 private:
+    SOCKET m_listen_socekt;
     std::thread m_central_thread;
     concurrency::concurrent_queue<std::shared_ptr<Packet>> m_packet_queue;
 

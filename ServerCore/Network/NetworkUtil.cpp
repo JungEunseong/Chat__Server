@@ -21,20 +21,18 @@ bool NetworkUtil::listen(SOCKET socket, int backlog)
 {
     if(FALSE == ::listen(socket, backlog))
         return false;
-
+    
     return true;
 }
 
-bool NetworkUtil::accept(std::shared_ptr<NetworkCore> network_core, SOCKET listen_socket, std::shared_ptr<AcceptIO> io)
+bool NetworkUtil::accept(SOCKET listen_socket, std::shared_ptr<AcceptIO> io)
 {
-    network_core->register_socket_in_iocp_handle(listen_socket);
-    
     constexpr DWORD addr_length = sizeof(sockaddr_in) + 16;
     DWORD dwBytes = 0;
     
     if(false == ::AcceptEx(listen_socket, io->m_socket, reinterpret_cast<PVOID>(io->m_accept_buffer),0
         , addr_length, addr_length,
-        &dwBytes, reinterpret_cast<LPOVERLAPPED>(&io)))
+        &dwBytes, reinterpret_cast<LPOVERLAPPED>(io.get())))
     {
 		const int err_no = ::WSAGetLastError();
 		if (WSA_IO_PENDING != err_no)

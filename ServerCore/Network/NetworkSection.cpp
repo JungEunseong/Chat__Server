@@ -9,6 +9,11 @@ NetworkSection::~NetworkSection()
 {
 }
 
+void NetworkSection::init(int section_id)
+{
+    m_section_thread= std::thread([this](){ section_thread_work(); });
+}
+
 unsigned int NetworkSection::generate_section_id()
 {
     static unsigned int id_generator = 0;
