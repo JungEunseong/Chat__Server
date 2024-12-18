@@ -21,6 +21,8 @@ public:
 
     unsigned int get_id() const { return m_section_id; }
 public:
+    void enter_section(std::shared_ptr<Session> session);
+    void exit_section(int session_id);
     void push_task(std::shared_ptr<iTask> task);
     
 private:

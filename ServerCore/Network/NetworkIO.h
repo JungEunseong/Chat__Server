@@ -33,7 +33,6 @@ public:
 
     SOCKET m_socket;
     char m_accept_buffer[1024];
-    
 };
 
 class ConnectIO : public NetworkIO

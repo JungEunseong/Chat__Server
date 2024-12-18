@@ -16,21 +16,45 @@ void ServerBase::init(int iocp_thread_count, int section_count)
         m_sections.emplace(section_id, section);
     }
 }
-void ServerBase::open(std::string open_ip, int open_port, int accept_back_log)
+void ServerBase::open(std::string open_ip, int open_port, std::function<std::shared_ptr<Session>()> session_factory, int accept_back_log)
 {
-    NetworkUtil::bind(m_listen_socekt, open_ip.c_str(), open_port);
-    NetworkUtil::listen(m_listen_socekt, 1);
+    m_session_factory = session_factory;
+    register_socket_in_iocp_handle(m_listen_socket);
+    NetworkUtil::bind(m_listen_socket, open_ip.c_str(), open_port);
+    NetworkUtil::listen(m_listen_socket, 1);
 
     for(int i = 0; i < accept_back_log; ++i)
     {
-        std::shared_ptr<AcceptIO> io = std::make_shared<AcceptIO>();
-        NetworkUtil::accept(m_listen_socekt, io);
+        AcceptIO* io = new AcceptIO;
+        if(false == NetworkUtil::accept(m_listen_socket, io))
+        {
+            // 서버 정지
+            return; 
+        }
+           
     }
 }
 
-void ServerBase::on_accept(int bytes_transferred, NetworkIO* io)
-{
-    AcceptIO* accept_io = static_cast<AcceptIO*>(io);
+void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
+    
+    AcceptIO* accept_io = reinterpret_cast<AcceptIO*>(io);
+
+    std::shared_ptr<Session> session = m_session_factory();
+    session->set_id(Session::generate_session_id());
+
+    // receive 완성 후 호출
+    NetworkUtil::receive();
+
+    // 로드 밸런싱
+    m_sections[0]->enter_section(session);
+
+    accept_io->Init();
+    
+    if(false == NetworkUtil::accept(m_listen_socket, accept_io))
+    {
+        // 서버 중지
+        return;
+    }
 }
 
 void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)

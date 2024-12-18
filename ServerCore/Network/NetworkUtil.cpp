@@ -25,14 +25,15 @@ bool NetworkUtil::listen(SOCKET socket, int backlog)
     return true;
 }
 
-bool NetworkUtil::accept(SOCKET listen_socket, std::shared_ptr<AcceptIO> io)
+bool NetworkUtil::accept(SOCKET listen_socket, AcceptIO* io)
 {
+    
     constexpr DWORD addr_length = sizeof(sockaddr_in) + 16;
     DWORD dwBytes = 0;
     
     if(false == ::AcceptEx(listen_socket, io->m_socket, reinterpret_cast<PVOID>(io->m_accept_buffer),0
         , addr_length, addr_length,
-        &dwBytes, reinterpret_cast<LPOVERLAPPED>(io.get())))
+        &dwBytes, reinterpret_cast<LPOVERLAPPED>(io)))
     {
 		const int err_no = ::WSAGetLastError();
 		if (WSA_IO_PENDING != err_no)
@@ -45,10 +46,8 @@ bool NetworkUtil::accept(SOCKET listen_socket, std::shared_ptr<AcceptIO> io)
 	return true;
 }
 
-bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET socket, std::shared_ptr<ConnectIO> io)
+bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET socket, ConnectIO* io)
 {
-    network_core->register_socket_in_iocp_handle(socket);
-    
     sockaddr_in addr;
     addr.sin_family = AF_INET;
     inet_pton(AF_INET, io->m_ip.c_str(), &(addr.sin_addr.s_addr));
@@ -64,6 +63,11 @@ bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET sock
         }
     }
 
+    return true;
+}
+
+bool NetworkUtil::receive()
+{
     return true;
 }
 

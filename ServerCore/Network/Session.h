@@ -6,8 +6,13 @@ class Session
 public:
     Session() = default;
     virtual ~Session() = default;
-    
+
 public:
+    static int generate_session_id();
+public:
+    int get_id() { return m_session_id; };
+    void set_id(int id) { m_session_id = id; };
+    
     void set_socket(SOCKET socket){ m_connecting_socket = socket; }
     void set_remote_ip(const char* ip){ m_remote_ip = std::string(ip); }
     void set_remote_ip(std::string&& ip){ m_remote_ip = ip; }
@@ -30,7 +35,10 @@ public:
 
     unsigned int get_section_id();
     std::shared_ptr<class NetworkSection> get_section()  { return m_section; }
+    void set_section(std::shared_ptr<class NetworkSection> section) { m_section = section; }
 private:
+    int m_session_id;
+    
     SOCKET m_connecting_socket;
     std::string m_remote_ip;
     int m_remote_port;
