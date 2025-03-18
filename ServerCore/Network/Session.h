@@ -12,7 +12,8 @@ public:
 public:
     int get_id() { return m_session_id; };
     void set_id(int id) { m_session_id = id; };
-    
+
+    SOCKET get_socket() { return m_connecting_socket; }
     void set_socket(SOCKET socket){ m_connecting_socket = socket; }
     void set_remote_ip(const char* ip){ m_remote_ip = std::string(ip); }
     void set_remote_ip(std::string&& ip){ m_remote_ip = ip; }
@@ -36,6 +37,8 @@ public:
     unsigned int get_section_id();
     std::shared_ptr<class NetworkSection> get_section()  { return m_section; }
     void set_section(std::shared_ptr<class NetworkSection> section) { m_section = section; }
+
+    RecvIO& get_recv_io(){ return m_recv_io; }
 private:
     int m_session_id;
     
@@ -44,5 +47,7 @@ private:
     int m_remote_port;
 
     std::shared_ptr<class NetworkSection> m_section;
+    
     RecvBuffer m_recv_buffer;
+    RecvIO m_recv_io;
 };

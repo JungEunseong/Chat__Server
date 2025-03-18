@@ -10,7 +10,7 @@ public:
    static bool accept(SOCKET listen_socket, class AcceptIO* io);
    static bool connect(std::shared_ptr<class NetworkCore> network_core, SOCKET socket, class ConnectIO* io);
    static bool send();
-   static bool receive();
+   static bool receive(SOCKET socket, class RecvIO* io);
    static bool disconnect();
     
 };

@@ -66,8 +66,25 @@ bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET sock
     return true;
 }
 
-bool NetworkUtil::receive()
+bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
 {
+    WSABUF buf;
+    buf.buf = io->m_session->get_recv_buffer().GetReadPos();
+    buf.len = io->m_session->get_recv_buffer().GetRemainingSize();
+
+    DWORD recv_bytes = 0;
+    DWORD flag = 0;
+
+    if(false == WSARecv(socket, &buf, 1, &recv_bytes, &flag, io, nullptr))
+    {
+        int err_code = ::GetLastError();
+
+        if(err_code == WSA_IO_PENDING)
+        {
+            // TODO: 로그
+            return false;
+        }
+    }
     return true;
 }
 

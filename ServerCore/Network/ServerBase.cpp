@@ -41,15 +41,15 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
 
     std::shared_ptr<Session> session = m_session_factory();
     session->set_id(Session::generate_session_id());
+    session->set_socket(accept_io->m_socket);
 
     // receive 완성 후 호출
-    NetworkUtil::receive();
-
-    // 로드 밸런싱
-    m_sections[0]->enter_section(session);
-
-    accept_io->Init();
+    if(false == NetworkUtil::receive(session->get_socket(), &session->get_recv_io()))
+        session->do_disconnect();
+    else
+        m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
     
+    accept_io->Init();
     if(false == NetworkUtil::accept(m_listen_socket, accept_io))
     {
         // 서버 중지
@@ -80,6 +80,16 @@ void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)
 
         complete_byte_length += header.packet_size;
     }
+
+    session->get_recv_buffer().Clean();
+
+    if(false == NetworkUtil::receive(recv_io->m_session->get_socket(), recv_io))
+    {
+        session->do_disconnect();
+        // TODO:로그
+        return;
+    }
+    
 }
 
 void ServerBase::central_thread_work()
