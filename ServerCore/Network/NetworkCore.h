@@ -1,7 +1,7 @@
 #pragma once
 class NetworkIO;
 
-class NetworkCore : public std::enable_shared_from_this<NetworkCore>
+class NetworkCore
 {
 public:
     NetworkCore();

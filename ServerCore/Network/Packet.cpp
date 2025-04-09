@@ -14,12 +14,12 @@ void Packet::set_packet(char* data, int size)
     memcpy(m_buffer.data(), data, size);  
 }
 
-void Packet::set_owner(std::shared_ptr<Session> session)
+void Packet::set_owner(Session* session)
 {
     m_owner = session;
 }
 
-std::shared_ptr<Session> Packet::get_owner()
+Session* Packet::get_owner()
 {
     return m_owner;
 }

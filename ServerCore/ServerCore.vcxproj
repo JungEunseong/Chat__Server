@@ -23,6 +23,7 @@
     <ClCompile Include="Network\Acceptor.cpp" />
     <ClCompile Include="Network\iChannel.cpp" />
     <ClCompile Include="Network\iTask.cpp" />
+    <ClCompile Include="Network\MultiSender.cpp" />
     <ClCompile Include="Network\NetworkCore.cpp" />
     <ClCompile Include="Network\NetworkIO.cpp" />
     <ClCompile Include="Network\NetworkSection.cpp" />
@@ -40,8 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Network\Acceptor.h" />
+    <ClInclude Include="Network\Base.h" />
     <ClInclude Include="Network\iChannel.h" />
     <ClInclude Include="Network\iTask.h" />
+    <ClInclude Include="Network\MultiSender.h" />
     <ClInclude Include="Network\NetworkCore.h" />
     <ClInclude Include="Network\NetworkIO.h" />
     <ClInclude Include="Network\NetworkSection.h" />

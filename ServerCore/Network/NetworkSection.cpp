@@ -20,7 +20,7 @@ unsigned int NetworkSection::generate_section_id()
     return ++id_generator;
 }
 
-void NetworkSection::enter_section(std::shared_ptr<Session> session)
+void NetworkSection::enter_section(Session* session)
 {
     if(m_sessions.count(session->get_id()) != 0)
     {
@@ -36,12 +36,12 @@ void NetworkSection::exit_section(int session_id)
     if(m_sessions.count(session_id) == 0)
         return;
     
-    std::shared_ptr<Session> session = m_sessions.at(session_id);
+    Session* session = m_sessions.at(session_id);
     session->set_section(nullptr);
     m_sessions.erase(session_id);
 }
 
-void NetworkSection::push_task(std::shared_ptr<iTask> task)
+void NetworkSection::push_task(iTask* task)
 {
     task->execute_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(task->delay_time);
     m_task_queue.push(task);
@@ -53,7 +53,7 @@ void NetworkSection::section_thread_work()
     {
         if(m_task_queue.empty()) continue;
         
-        std::shared_ptr<iTask> task = nullptr;
+        iTask* task = nullptr;
         if(false == m_task_queue.try_pop(task)) continue;
         
         if(std::chrono::steady_clock::now() < task->execute_time)

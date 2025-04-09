@@ -49,5 +49,14 @@ class RecvIO : public NetworkIO
 public:
     RecvIO() : NetworkIO(IoType::RECV) { }
 
-    std::shared_ptr<class Session> m_session;
+    class Session* m_session;
+};
+
+class SendIO : public NetworkIO
+{
+public:
+    SendIO() : NetworkIO(IoType::SEND) { }
+
+    Session* m_session;
+    std::vector<WSABUF> m_buffers;
 };

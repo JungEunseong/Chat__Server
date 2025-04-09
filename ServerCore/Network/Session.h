@@ -19,11 +19,16 @@ public:
     void set_remote_ip(std::string&& ip){ m_remote_ip = ip; }
     void set_remote_port(int port){ m_remote_ip = port; }
 public:
-    void do_connect();
-    void do_recieve();
-    void do_send();
-    void do_disconnect();
+    bool do_connect();
+    bool do_recieve();
+    bool do_send(Packet* packet);
+    bool do_disconnect();
 
+private:
+    void complete_connect();
+    void complete_recieve();
+    void complete_send(int send_size);
+    void complete_disconnect();
 public:
     virtual void on_connected();
     virtual void on_recv(std::shared_ptr<Packet> packet);
@@ -49,5 +54,6 @@ private:
     std::shared_ptr<class NetworkSection> m_section;
     
     RecvBuffer m_recv_buffer;
+    MultiSender m_multi_sender;
     RecvIO m_recv_io;
 };
