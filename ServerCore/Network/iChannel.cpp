@@ -17,7 +17,7 @@ void iChannel::task_thread_work()
    {
        while(m_task_queue.empty() == false)
        {
-           std::shared_ptr<iTask> task = nullptr;
+           iTask* task = nullptr;
            if(m_task_queue.try_pop(task) == false)
                break;
 

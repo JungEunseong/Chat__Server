@@ -7,7 +7,7 @@ public:
     ~iChannel();
 
 public:
-    void RegisterTask(std::shared_ptr<iTask> task) {m_task_queue.push(task->shared_from_this()); }
+    void RegisterTask(iTask* task) {m_task_queue.push(task); }
 protected:
     void task_thread_work();
 
@@ -16,5 +16,5 @@ private:
     int m_channel_no;
     
     std::thread m_channel_thread;
-    Concurrency::concurrent_queue<std::shared_ptr<iTask>> m_task_queue;
+    Concurrency::concurrent_queue<iTask*> m_task_queue;
 };

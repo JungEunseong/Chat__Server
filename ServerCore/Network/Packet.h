@@ -22,14 +22,15 @@ public:
     ~Packet();
 
     void set_packet(char* data, int size);
-    void set_owner(std::shared_ptr<class Session> session);
-    std::shared_ptr<Session> get_owner(); 
+    void set_owner(class Session* session);
+    Session* get_owner(); 
 public:
 
     void initialize(unsigned short protocol_no) { *(static_cast<unsigned short*>(get_protocol_ptr())) = protocol_no; }
     void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_buffer.size()); }
     unsigned short get_size() const { return *m_buffer.data(); }
     unsigned short get_protocol() const { return *(m_buffer.data() + PACKET_SIZE_SIZEOF); }
+    std::vector<char>& get_buffer() {return m_buffer; }
 
 public:
     
@@ -102,6 +103,6 @@ private:
     int m_current_idx;
 
     // For Read 
-    std::shared_ptr<class Session> m_owner;
+    Session* m_owner;
 };
 

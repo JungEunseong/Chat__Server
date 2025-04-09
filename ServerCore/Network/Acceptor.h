@@ -7,7 +7,7 @@ public:
     void set_address(const char* ip, int port);
 
 private:
-	std::shared_ptr<class NetworkCore> m_network_core;
+	class NetworkCore* m_network_core;
 
     SOCKET m_listen_socket;
 

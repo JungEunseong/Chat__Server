@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct iTask : std::enable_shared_from_this<iTask>
+struct iTask
 {
     bool is_repeat = false;
     std::chrono::steady_clock::time_point execute_time;

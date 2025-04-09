@@ -46,7 +46,7 @@ bool NetworkUtil::accept(SOCKET listen_socket, AcceptIO* io)
 	return true;
 }
 
-bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET socket, ConnectIO* io)
+bool NetworkUtil::connect(NetworkCore* network_core, SOCKET socket, ConnectIO* io)
 {
     sockaddr_in addr;
     addr.sin_family = AF_INET;
@@ -63,6 +63,26 @@ bool NetworkUtil::connect(std::shared_ptr<NetworkCore> network_core, SOCKET sock
         }
     }
 
+    return true;
+}
+
+bool NetworkUtil::send(SendIO* io, bool& is_not_pending, DWORD& send_byte_size)
+{
+    auto result = ::WSASend(io->m_session->get_socket(), io->m_buffers.data(), static_cast<DWORD>(io->m_buffers.size()), &send_byte_size, 0, io,  nullptr);
+
+    if(result == 0)
+        is_not_pending = true;
+    else if(SOCKET_ERROR == result)
+    {
+        auto err_code = ::WSAGetLastError();
+
+        if(err_code != ERROR_IO_PENDING)
+        {
+            // TODO: log 
+            return false;
+        }
+    }
+    
     return true;
 }
 

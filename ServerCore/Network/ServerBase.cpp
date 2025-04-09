@@ -10,13 +10,13 @@ void ServerBase::init(int iocp_thread_count, int section_count)
     
     for(int i = 0; i < section_count; ++i)
     {
-        std::shared_ptr<NetworkSection> section = std::make_shared<NetworkSection>();
+        NetworkSection* section = xnew NetworkSection;
         int section_id = NetworkSection::generate_section_id();
         section->init(section_id);
         m_sections.emplace(section_id, section);
     }
 }
-void ServerBase::open(std::string open_ip, int open_port, std::function<std::shared_ptr<Session>()> session_factory, int accept_back_log)
+void ServerBase::open(std::string open_ip, int open_port, std::function<Session*()> session_factory, int accept_back_log)
 {
     m_session_factory = session_factory;
     register_socket_in_iocp_handle(m_listen_socket);
@@ -39,14 +39,11 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     
     AcceptIO* accept_io = reinterpret_cast<AcceptIO*>(io);
 
-    std::shared_ptr<Session> session = m_session_factory();
+    Session* session = m_session_factory();
     session->set_id(Session::generate_session_id());
     session->set_socket(accept_io->m_socket);
 
-    // receive 완성 후 호출
-    if(false == NetworkUtil::receive(session->get_socket(), &session->get_recv_io()))
-        session->do_disconnect();
-    else
+    if(true == session->do_recieve())
         m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
     
     accept_io->Init();
@@ -60,7 +57,7 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
 void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)
 {
     RecvIO* recv_io = static_cast<RecvIO*>(io);
-    std::shared_ptr<Session> session = recv_io->m_session;
+    Session* session = recv_io->m_session;
 
     int complete_byte_length = 0;
     while(true)
@@ -72,7 +69,7 @@ void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)
         
         if(header.packet_size > remain_len) break;
 
-        std::shared_ptr<Packet> packet = std::shared_ptr<Packet>();
+        Packet* packet = xnew Packet; 
         packet->set_packet(session->get_recv_buffer().GetReadPos() + complete_byte_length, header.packet_size);
         packet->set_owner(session);
 
@@ -83,13 +80,19 @@ void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)
 
     session->get_recv_buffer().Clean();
 
-    if(false == NetworkUtil::receive(recv_io->m_session->get_socket(), recv_io))
+    if(false == session->do_recieve())
     {
-        session->do_disconnect();
         // TODO:로그
         return;
     }
     
+}
+
+void ServerBase::on_send(int bytes_transferred, NetworkIO* io)
+{
+    SendIO* send_io = static_cast<SendIO*>(io);
+
+    send_io->m_session->on_send(bytes_transferred);
 }
 
 void ServerBase::central_thread_work()
@@ -98,13 +101,10 @@ void ServerBase::central_thread_work()
     {
         std::shared_ptr<Packet> packet;
 
-        if(m_packet_queue.try_pop(packet) == false) continue;
         if(packet == nullptr) continue;
-        std::shared_ptr<Session> session = packet->get_owner();
-        
+        Session* session = packet->get_owner();
+       
         std::shared_ptr<iTask> task;
         task->func = [&]() { session->execute_packet(packet); };
-
-        m_sections[session->get_section_id()]->push_task(task);
     }
 }
