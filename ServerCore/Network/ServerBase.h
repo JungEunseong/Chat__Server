@@ -26,6 +26,6 @@ private:
     std::thread m_central_thread;
     concurrency::concurrent_queue<Packet*> m_packet_queue;
 
-    std::map<unsigned int, NetworkSection*> m_sections;
+    std::map<unsigned int, class NetworkSection*> m_sections;
     std::function<Session*()> m_session_factory;
 };

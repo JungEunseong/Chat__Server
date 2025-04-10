@@ -20,6 +20,11 @@ unsigned int NetworkSection::generate_section_id()
     return ++id_generator;
 }
 
+HANDLE NetworkSection::get_iocp_handle()
+{
+    return m_owner->get_iocp_handle();
+}
+
 void NetworkSection::enter_section(Session* session)
 {
     if(m_sessions.count(session->get_id()) != 0)

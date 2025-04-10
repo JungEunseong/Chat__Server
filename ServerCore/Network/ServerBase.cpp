@@ -43,6 +43,8 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     session->set_id(Session::generate_session_id());
     session->set_socket(accept_io->m_socket);
 
+    register_socket_in_iocp_handle(session->get_socket());
+
     if(true == session->do_recieve())
         m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
     
@@ -99,12 +101,16 @@ void ServerBase::central_thread_work()
 {
     while(is_running() == true)
     {
-        std::shared_ptr<Packet> packet;
+        Packet* packet;
 
-        if(packet == nullptr) continue;
+        if(false == m_packet_queue.try_pop(packet))
+            continue;
+        
         Session* session = packet->get_owner();
        
-        std::shared_ptr<iTask> task;
+        iTask* task = xnew iTask;
         task->func = [&]() { session->execute_packet(packet); };
+
+        session->get_section()->push_task(task);
     }
 }
