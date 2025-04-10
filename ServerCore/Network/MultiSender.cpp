@@ -42,8 +42,7 @@ bool MultiSender::on_send()
 
 bool MultiSender::send()
 {
-    m_send_io.m_buffers.clear();
-    m_send_io.Init();
+    m_send_io.Clear();
 
     while(false == m_register_packet.empty())
     {
@@ -67,7 +66,23 @@ bool MultiSender::send()
         return false;
 
     if(true == is_not_pending)
-        m_owner->on_send(send_byte_size);
+    {
+        NetworkSection* section = m_owner->get_section();
+        if(nullptr == section)
+        {
+            // TODO:LOG
+            m_owner->do_disconnect();
+            return false;
+        }
+        
+        ULONG_PTR key = 0;
+        if(0 == ::PostQueuedCompletionStatus(section->get_iocp_handle(), send_byte_size, key, &m_send_io))
+        {
+            //TODO: LOG
+            m_owner->do_disconnect();
+            return false;
+        }
+    }
     
     return true;
 }

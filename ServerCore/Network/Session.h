@@ -31,17 +31,17 @@ private:
     void complete_disconnect();
 public:
     virtual void on_connected();
-    virtual void on_recv(std::shared_ptr<Packet> packet);
+    virtual void on_recv(Packet* packet);
     virtual void on_send(int data_size);
     virtual void on_disconnected();
-    virtual void execute_packet(std::shared_ptr<Packet>) = 0;
+    virtual void execute_packet(Packet* packet) = 0;
     
 
     RecvBuffer& get_recv_buffer() { return m_recv_buffer; }
 
     unsigned int get_section_id();
-    std::shared_ptr<class NetworkSection> get_section()  { return m_section; }
-    void set_section(std::shared_ptr<class NetworkSection> section) { m_section = section; }
+    class NetworkSection* get_section()  { return m_section; }
+    void set_section(class NetworkSection* section) { m_section = section; }
 
     RecvIO& get_recv_io(){ return m_recv_io; }
 private:
@@ -51,7 +51,7 @@ private:
     std::string m_remote_ip;
     int m_remote_port;
 
-    std::shared_ptr<class NetworkSection> m_section;
+    class NetworkSection* m_section;
     
     RecvBuffer m_recv_buffer;
     MultiSender m_multi_sender;

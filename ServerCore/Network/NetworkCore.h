@@ -8,6 +8,9 @@ public:
     virtual ~NetworkCore();
 
 public:
+    HANDLE get_iocp_handle() { return m_iocp_handle; }
+    
+public:
     void init(int iocp_thread_count);
     bool register_socket_in_iocp_handle(SOCKET socket);
 

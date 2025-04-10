@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "ServerBase.h"
 
 struct task_cmp
 {
@@ -20,6 +21,7 @@ public:
     static unsigned int generate_section_id();
 
     unsigned int get_id() const { return m_section_id; }
+    HANDLE get_iocp_handle();
 public:
     void enter_section(Session* session);
     void exit_section(int session_id);

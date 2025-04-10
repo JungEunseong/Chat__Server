@@ -57,6 +57,12 @@ class SendIO : public NetworkIO
 public:
     SendIO() : NetworkIO(IoType::SEND) { }
 
+    void Clear()
+    {
+        Init();
+        m_buffers.clear();
+    }
+
     Session* m_session;
     std::vector<WSABUF> m_buffers;
 };
