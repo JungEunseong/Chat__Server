@@ -1,6 +1,24 @@
 #include "pch.h"
 #include "NetworkUtil.h"
 
+NetworkUtil::NetworkUtil()
+{
+    SOCKET temp_socket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+    DWORD recv_bytes = 0;
+    GUID guid = WSAID_DISCONNECTEX;
+    
+    if (SOCKET_ERROR == ::WSAIoctl(temp_socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), DisconnectEx, sizeof(*DisconnectEx), &recv_bytes, NULL, NULL))
+    {
+        // TODO: 로그
+        // TODO: 서버 종료
+    }
+}
+
+bool NetworkUtil::register_socket(HANDLE iocp_handle, SOCKET socket)
+{
+    return ::CreateIoCompletionPort(reinterpret_cast<HANDLE>(socket), iocp_handle,0,0);
+}
+
 bool NetworkUtil::bind(SOCKET socket, const char* ip, int port)
 {
     sockaddr_in addr;
@@ -106,5 +124,9 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
         }
     }
     return true;
+}
+
+bool NetworkUtil::disconnect()
+{
 }
 

@@ -12,8 +12,6 @@ public:
     
 public:
     void init(int iocp_thread_count);
-    bool register_socket_in_iocp_handle(SOCKET socket);
-
 
     virtual void on_connect(int bytes_transferred, NetworkIO* io) = 0;
     virtual void on_accept(int bytes_transferred, NetworkIO* io) = 0;

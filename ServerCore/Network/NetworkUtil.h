@@ -3,8 +3,13 @@
 class NetworkUtil
 {
 public:
+   NetworkUtil();
+   ~NetworkUtil();
+
+public:
+public:
    static bool socket_opt_setting(SOCKET socket);
-   static bool register_socket();
+   static bool register_socket(HANDLE iocp_handle, SOCKET socket);
    static bool bind(SOCKET socket, const char* ip, int port);
    static bool listen(SOCKET socket, int backlog = 1);
    static bool accept(SOCKET listen_socket, class AcceptIO* io);
@@ -12,5 +17,9 @@ public:
    static bool send(class SendIO* io, bool& is_not_pending, DWORD& send_byte_size);
    static bool receive(SOCKET socket, class RecvIO* io);
    static bool disconnect();
-    
+
+public:
+   static LPFN_DISCONNECTEX DisconnectEx;
 };
+
+extern static NetworkUtil g_network_util;

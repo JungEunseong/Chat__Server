@@ -19,7 +19,7 @@ void ServerBase::init(int iocp_thread_count, int section_count)
 void ServerBase::open(std::string open_ip, int open_port, std::function<Session*()> session_factory, int accept_back_log)
 {
     m_session_factory = session_factory;
-    register_socket_in_iocp_handle(m_listen_socket);
+    NetworkUtil::register_socket(m_iocp_handle, m_listen_socket);
     NetworkUtil::bind(m_listen_socket, open_ip.c_str(), open_port);
     NetworkUtil::listen(m_listen_socket, 1);
 
@@ -43,7 +43,7 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     session->set_id(Session::generate_session_id());
     session->set_socket(accept_io->m_socket);
 
-    register_socket_in_iocp_handle(session->get_socket());
+    NetworkUtil::register_socket(m_iocp_handle, session->get_socket());
 
     if(true == session->do_recieve())
         m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직

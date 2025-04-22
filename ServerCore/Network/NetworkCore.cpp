@@ -22,11 +22,6 @@ void NetworkCore::init(int iocp_thread_count)
         m_threads.emplace_back([this](){ iocp_thread_work(); });
 }
 
-bool NetworkCore::register_socket_in_iocp_handle(SOCKET socket)
-{
-    return ::CreateIoCompletionPort(reinterpret_cast<HANDLE>(socket), m_iocp_handle,0,0);
-}
-
 void NetworkCore::iocp_thread_work()
 {
     while(m_is_running == true)
