@@ -7,10 +7,10 @@ NetworkUtil::NetworkUtil()
     DWORD recv_bytes = 0;
     GUID guid = WSAID_DISCONNECTEX;
     
-    if (SOCKET_ERROR == ::WSAIoctl(temp_socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), DisconnectEx, sizeof(*DisconnectEx), &recv_bytes, NULL, NULL))
+    if (SOCKET_ERROR == ::WSAIoctl(temp_socket, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &DisconnectEx, sizeof(&DisconnectEx), &recv_bytes, NULL, NULL))
     {
-        // TODO: 로그
-        // TODO: 서버 종료
+        // TODO: LOG 
+        // TODO: QUIT PROGRAM 
     }
 }
 
@@ -128,5 +128,6 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
 
 bool NetworkUtil::disconnect()
 {
+    return true;
 }
 

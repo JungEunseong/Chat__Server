@@ -19,7 +19,7 @@ public:
    static bool disconnect();
 
 public:
-   static LPFN_DISCONNECTEX DisconnectEx;
+   LPFN_DISCONNECTEX DisconnectEx;
 };
 
-extern static NetworkUtil g_network_util;
+extern NetworkUtil g_network_util;
