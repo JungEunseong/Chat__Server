@@ -126,8 +126,15 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
     return true;
 }
 
-bool NetworkUtil::disconnect()
+bool NetworkUtil::disconnect(SOCKET socket, class DisconnectIO* io)
 {
+    if (false == g_network_util.DisconnectEx(socket, io, TF_REUSE_SOCKET, 0))
+    {
+        if (WSAGetLastError() != ERROR_IO_PENDING)
+        {
+            // TODO: 로그
+            return false;
+        }
+    }
     return true;
 }
-

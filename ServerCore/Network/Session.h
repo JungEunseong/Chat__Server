@@ -4,11 +4,13 @@
 class Session
 {
 public:
-    Session() = default;
+    Session() : m_multi_sender(this) { }
     virtual ~Session() = default;
 
 public:
     static int generate_session_id();
+public:
+    void init();
 public:
     int get_id() { return m_session_id; };
     void set_id(int id) { m_session_id = id; };
@@ -26,7 +28,7 @@ public:
 
 private:
     void complete_connect();
-    void complete_recieve();
+    void complete_recieve(int recv_size);
     void complete_send(int send_size);
     void complete_disconnect();
 public:
@@ -56,4 +58,6 @@ private:
     RecvBuffer m_recv_buffer;
     MultiSender m_multi_sender;
     RecvIO m_recv_io;
+    DisconnectIO m_disconnect_io;
+    
 };

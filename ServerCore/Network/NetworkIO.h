@@ -66,3 +66,11 @@ public:
     Session* m_session;
     std::vector<WSABUF> m_buffers;
 };
+
+class DisconnectIO : public NetworkIO
+{
+public:
+    DisconnectIO() : NetworkIO(IoType::DISCONNECT) { }
+    
+    Session* m_session;
+};
