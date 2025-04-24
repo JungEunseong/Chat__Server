@@ -12,21 +12,22 @@ public:
     
 public:
     void init(int iocp_thread_count);
-
-    virtual void on_connect(int bytes_transferred, NetworkIO* io) = 0;
-    virtual void on_accept(int bytes_transferred, NetworkIO* io) = 0;
-    virtual void on_recv(int bytes_transferred, NetworkIO* io) = 0;
-    virtual void on_send(int bytes_transferred, NetworkIO* io) = 0;
-    virtual void on_disconnect(int bytes_transferred, NetworkIO* io) = 0;
-
 public:
     bool is_running() { return m_is_running; }
 
+public:
+    void push_packet(Packet* packet) { m_packet_queue.push(packet); }
+    
 protected:
     void iocp_thread_work();
-    std::atomic<bool> m_is_running;
-    HANDLE m_iocp_handle;
+    virtual void on_iocp_io(NetworkIO* io, int bytes_transferred) abstract;
     
-    std::vector<std::thread> m_threads;
+protected:
+    std::atomic<bool> m_is_running;
+    
+    HANDLE m_iocp_handle;
+    std::vector<std::thread> m_iocp_threads;
+    
+    concurrency::concurrent_queue<Packet*> m_packet_queue;
 };
 

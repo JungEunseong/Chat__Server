@@ -10,8 +10,8 @@ int Session::generate_session_id()
 
 void Session::init()
 {
-    m_recv_io.m_session = this;
-    m_disconnect_io.m_session = this;
+    m_recv_io.set_session(this);
+    m_disconnect_io.set_session(this);
 }
 
 bool Session::do_recieve()
@@ -40,26 +40,73 @@ bool Session::do_disconnect()
     return true;
 }
 
-void Session::complete_recieve(int recv_size)
+void Session::complete_connect(int bytes_transferred)
 {
-    if (recv_size == 0)
+    
+}
+
+void Session::complete_recieve(int bytes_transferred)
+{
+    if (bytes_transferred == 0)
     {
         // TODO: LOG
         do_disconnect();
         return;
     }
 
-    if (false == m_recv_buffer.OnWrite(recv_size))
+    if (false == m_recv_buffer.OnWrite(bytes_transferred))
     {
         // TODO: LOG
         do_disconnect();
+        return;
+    }
+
+    int complete_byte_length = 0;
+    while(true)
+    {
+        int remain_len = bytes_transferred - complete_byte_length;
+        if(remain_len > PACKET_HEADER_SIZEOF) break;
+
+        PacketHeader header = *(reinterpret_cast<PacketHeader*>(m_recv_buffer.GetReadPos() + complete_byte_length));
+        
+        if(header.packet_size > remain_len) break;
+
+        Packet* packet = xnew Packet; 
+        packet->set_packet(m_recv_buffer.GetReadPos() + complete_byte_length, header.packet_size);
+        packet->set_owner(this);
+
+        if (nullptr == m_section)
+        {
+            //TODO: LOG
+            do_disconnect();
+            return;
+        }
+
+        NetworkCore* network_core = m_section->get_network_core();
+
+        if (nullptr == network_core)
+        {
+            //TODO: LOG
+            do_disconnect();
+            return;
+        }
+        
+        network_core->push_packet(packet);
+        complete_byte_length += header.packet_size;
+    }
+
+    m_recv_buffer.Clean();
+    
+    if(false == do_recieve())
+    {
+        // TODO: LOG
         return;
     }
 }
 
-void Session::complete_send(int send_size)
+void Session::complete_send(int bytes_transferred)
 {
-    on_send(send_size);
+    on_send(bytes_transferred);
     m_multi_sender.on_send();
 }
 

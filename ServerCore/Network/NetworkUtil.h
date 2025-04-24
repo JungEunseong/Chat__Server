@@ -22,4 +22,4 @@ public:
    LPFN_DISCONNECTEX DisconnectEx;
 };
 
-extern NetworkUtil g_network_util;
+extern NetworkUtil* g_network_util;

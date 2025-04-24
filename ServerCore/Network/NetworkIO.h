@@ -12,7 +12,7 @@ enum IoType
 class NetworkIO : public OVERLAPPED
 {
 public:
-    NetworkIO(IoType type) : io_type(type){ Init(); }
+    NetworkIO(IoType type) : m_io_type(type){ Init(); }
     ~NetworkIO() = default;
 
     void Init()
@@ -21,9 +21,12 @@ public:
     }
 
 public:
-    IoType GetType() { return io_type; }
+    Session* get_session() { return m_session; }
+    void set_session(Session* session) { m_session = session; }
+    IoType get_type() { return m_io_type; }
 private:
-    IoType io_type;
+    Session* m_session;
+    IoType m_io_type;
 };
 
 class AcceptIO : public NetworkIO
@@ -48,8 +51,6 @@ class RecvIO : public NetworkIO
 {
 public:
     RecvIO() : NetworkIO(IoType::RECV) { }
-
-    class Session* m_session;
 };
 
 class SendIO : public NetworkIO
@@ -63,7 +64,6 @@ public:
         m_buffers.clear();
     }
 
-    Session* m_session;
     std::vector<WSABUF> m_buffers;
 };
 
@@ -71,6 +71,4 @@ class DisconnectIO : public NetworkIO
 {
 public:
     DisconnectIO() : NetworkIO(IoType::DISCONNECT) { }
-    
-    Session* m_session;
 };

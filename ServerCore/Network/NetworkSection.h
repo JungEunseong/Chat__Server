@@ -22,6 +22,7 @@ public:
 
     unsigned int get_id() const { return m_section_id; }
     HANDLE get_iocp_handle();
+    NetworkCore* get_network_core() { return m_owner; }
 public:
     void enter_section(Session* session);
     void exit_section(int session_id);

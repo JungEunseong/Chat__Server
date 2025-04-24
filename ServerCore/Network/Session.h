@@ -26,10 +26,9 @@ public:
     bool do_send(Packet* packet);
     bool do_disconnect();
 
-private:
-    void complete_connect();
-    void complete_recieve(int recv_size);
-    void complete_send(int send_size);
+    void complete_connect(int bytes_transferred);
+    void complete_recieve(int bytes_transferred);
+    void complete_send(int bytes_transferred);
     void complete_disconnect();
 public:
     virtual void on_connected();

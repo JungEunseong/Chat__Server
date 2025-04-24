@@ -28,7 +28,7 @@ void ServerBase::open(std::string open_ip, int open_port, std::function<Session*
         AcceptIO* io = new AcceptIO;
         if(false == NetworkUtil::accept(m_listen_socket, io))
         {
-            // 서버 정지
+            // TODO: STOP SERVER 
             return; 
         }
            
@@ -56,47 +56,6 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     }
 }
 
-void ServerBase::on_recv(int bytes_transferred, NetworkIO* io)
-{
-    RecvIO* recv_io = static_cast<RecvIO*>(io);
-    Session* session = recv_io->m_session;
-
-    int complete_byte_length = 0;
-    while(true)
-    {
-        int remain_len = bytes_transferred - complete_byte_length;
-        if(remain_len > PACKET_HEADER_SIZEOF) break;
-
-        PacketHeader header = *(reinterpret_cast<PacketHeader*>(session->get_recv_buffer().GetReadPos() + complete_byte_length));
-        
-        if(header.packet_size > remain_len) break;
-
-        Packet* packet = xnew Packet; 
-        packet->set_packet(session->get_recv_buffer().GetReadPos() + complete_byte_length, header.packet_size);
-        packet->set_owner(session);
-
-        m_packet_queue.push(packet);
-
-        complete_byte_length += header.packet_size;
-    }
-
-    session->get_recv_buffer().Clean();
-
-    if(false == session->do_recieve())
-    {
-        // TODO:로그
-        return;
-    }
-    
-}
-
-void ServerBase::on_send(int bytes_transferred, NetworkIO* io)
-{
-    SendIO* send_io = static_cast<SendIO*>(io);
-
-    send_io->m_session->on_send(bytes_transferred);
-}
-
 void ServerBase::central_thread_work()
 {
     while(is_running() == true)
@@ -112,5 +71,32 @@ void ServerBase::central_thread_work()
         task->func = [&]() { session->execute_packet(packet); };
 
         session->get_section()->push_task(task);
+    }
+}
+
+void ServerBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
+{
+    Session* session = io->get_session();
+    
+    switch(io->get_type())
+    {
+    case IoType::CONNECT:
+        session->complete_connect(bytes_transferred);
+        break;
+    case IoType::DISCONNECT:
+        session->complete_disconnect();
+        break;
+    case IoType::ACCEPT:
+        on_accept(bytes_transferred, io);
+        break;
+    case IoType::RECV:
+        session->complete_recieve(bytes_transferred);
+        break;
+    case IoType::SEND:
+        session->complete_send(bytes_transferred);
+        break;
+    default:
+        // TODO: error log
+        break;
     }
 }

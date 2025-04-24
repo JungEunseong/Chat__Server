@@ -3,7 +3,7 @@
 
 MultiSender::MultiSender(Session* session) : m_owner(session)
 {
-    m_send_io.m_session = session;
+    m_send_io.set_session(session);
 }
 
 MultiSender::~MultiSender()

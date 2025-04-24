@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "NetworkUtil.h"
 
+
+extern NetworkUtil* g_network_util = xnew NetworkUtil;
+
 NetworkUtil::NetworkUtil()
 {
     SOCKET temp_socket = ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -86,7 +89,7 @@ bool NetworkUtil::connect(NetworkCore* network_core, SOCKET socket, ConnectIO* i
 
 bool NetworkUtil::send(SendIO* io, bool& is_not_pending, DWORD& send_byte_size)
 {
-    auto result = ::WSASend(io->m_session->get_socket(), io->m_buffers.data(), static_cast<DWORD>(io->m_buffers.size()), &send_byte_size, 0, io,  nullptr);
+    auto result = ::WSASend(io->get_session()->get_socket(), io->m_buffers.data(), static_cast<DWORD>(io->m_buffers.size()), &send_byte_size, 0, io,  nullptr);
 
     if(result == 0)
         is_not_pending = true;
@@ -107,8 +110,8 @@ bool NetworkUtil::send(SendIO* io, bool& is_not_pending, DWORD& send_byte_size)
 bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
 {
     WSABUF buf;
-    buf.buf = io->m_session->get_recv_buffer().GetReadPos();
-    buf.len = io->m_session->get_recv_buffer().GetRemainingSize();
+    buf.buf = io->get_session()->get_recv_buffer().GetReadPos();
+    buf.len = io->get_session()->get_recv_buffer().GetRemainingSize();
 
     DWORD recv_bytes = 0;
     DWORD flag = 0;
@@ -128,7 +131,7 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
 
 bool NetworkUtil::disconnect(SOCKET socket, class DisconnectIO* io)
 {
-    if (false == g_network_util.DisconnectEx(socket, io, TF_REUSE_SOCKET, 0))
+    if (false == g_network_util->DisconnectEx(socket, io, TF_REUSE_SOCKET, 0))
     {
         if (WSAGetLastError() != ERROR_IO_PENDING)
         {
