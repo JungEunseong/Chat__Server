@@ -67,7 +67,7 @@ bool NetworkUtil::accept(SOCKET listen_socket, AcceptIO* io)
 	return true;
 }
 
-bool NetworkUtil::connect(NetworkCore* network_core, SOCKET socket, ConnectIO* io)
+bool NetworkUtil::connect(SOCKET socket, ConnectIO* io)
 {
     sockaddr_in addr;
     addr.sin_family = AF_INET;

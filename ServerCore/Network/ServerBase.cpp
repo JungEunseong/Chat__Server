@@ -80,9 +80,6 @@ void ServerBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
     
     switch(io->get_type())
     {
-    case IoType::CONNECT:
-        session->complete_connect(bytes_transferred);
-        break;
     case IoType::DISCONNECT:
         session->complete_disconnect();
         break;

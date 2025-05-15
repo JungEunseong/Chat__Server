@@ -3,8 +3,8 @@
 class ServerBase : public NetworkCore
 {
 public:
-    ServerBase();
-    virtual ~ServerBase();
+    ServerBase() = default;
+    virtual ~ServerBase() = default;
     
 public:
     void init(int iocp_thread_count = 1, int section_count = 1);

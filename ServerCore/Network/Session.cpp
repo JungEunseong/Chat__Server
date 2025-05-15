@@ -61,41 +61,9 @@ void Session::complete_recieve(int bytes_transferred)
         return;
     }
 
-    int complete_byte_length = 0;
-    while(true)
-    {
-        int remain_len = bytes_transferred - complete_byte_length;
-        if(remain_len > PACKET_HEADER_SIZEOF) break;
+    int process_byte_size = on_recieve();
 
-        PacketHeader header = *(reinterpret_cast<PacketHeader*>(m_recv_buffer.GetReadPos() + complete_byte_length));
-        
-        if(header.packet_size > remain_len) break;
-
-        Packet* packet = xnew Packet; 
-        packet->set_packet(m_recv_buffer.GetReadPos() + complete_byte_length, header.packet_size);
-        packet->set_owner(this);
-
-        if (nullptr == m_section)
-        {
-            //TODO: LOG
-            do_disconnect();
-            return;
-        }
-
-        NetworkCore* network_core = m_section->get_network_core();
-
-        if (nullptr == network_core)
-        {
-            //TODO: LOG
-            do_disconnect();
-            return;
-        }
-        
-        network_core->push_packet(packet);
-        complete_byte_length += header.packet_size;
-    }
-
-    m_recv_buffer.Clean();
+    m_recv_buffer.OnRead(process_byte_size);
     
     if(false == do_recieve())
     {
@@ -116,6 +84,46 @@ void Session::complete_disconnect()
     
     m_section->exit_section(get_id());
     m_section = nullptr;
+}
+
+int Session::on_recieve()
+{
+    int complete_byte_length = 0;
+    
+    while(true)
+    {
+        int remain_len = m_recv_buffer.GetDataSize() - complete_byte_length;
+        if(remain_len > PACKET_HEADER_SIZEOF) break;
+
+        PacketHeader header = *(reinterpret_cast<PacketHeader*>(m_recv_buffer.GetReadPos() + complete_byte_length));
+        
+        if(header.packet_size > remain_len) break;
+
+        Packet* packet = xnew Packet; 
+        packet->set_packet(m_recv_buffer.GetReadPos() + complete_byte_length, header.packet_size);
+        packet->set_owner(this);
+
+        if (nullptr == m_section)
+        {
+            //TODO: LOG
+            do_disconnect();
+            return 0;
+        }
+        
+        NetworkCore* network_core = m_section->get_network_core();
+        if (nullptr == network_core)
+        {
+            //TODO: LOG
+            do_disconnect();
+            return 0;
+        }
+    
+        network_core->push_packet(packet);
+        
+        complete_byte_length += header.packet_size;
+    }
+
+    return complete_byte_length;
 }
 
 unsigned int Session::get_section_id()

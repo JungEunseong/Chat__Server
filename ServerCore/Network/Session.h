@@ -32,7 +32,7 @@ public:
     void complete_disconnect();
 public:
     virtual void on_connected();
-    virtual void on_recieve(Packet* packet);
+    virtual int on_recieve();
     virtual void on_send(int data_size);
     virtual void on_disconnected();
     virtual void execute_packet(Packet* packet) = 0;
