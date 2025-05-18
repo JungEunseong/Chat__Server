@@ -49,8 +49,10 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
 
     NetworkUtil::register_socket(m_iocp_handle, session->get_socket());
     session->complete_connect();
+
+    NetworkSection* first_section =  select_first_section();
     
-    m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
+    first_section->enter_section(session); // TODO: 로드 밸런싱 로직
     
     accept_io->Init();
     if(false == NetworkUtil::accept(m_listen_socket, accept_io))

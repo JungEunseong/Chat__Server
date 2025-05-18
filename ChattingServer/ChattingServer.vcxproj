@@ -165,11 +165,13 @@
     <ClCompile Include="ChatClientSession.cpp" />
     <ClCompile Include="ChatServerService.cpp" />
     <ClCompile Include="ChattingServerMain.cpp" />
+    <ClCompile Include="Lobby.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChatClientSession.h" />
     <ClInclude Include="ChatServerService.h" />
+    <ClInclude Include="Lobby.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

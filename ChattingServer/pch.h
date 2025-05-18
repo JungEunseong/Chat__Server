@@ -3,3 +3,4 @@
 #include "CoreIncludes.h"
 #include "ChatServerService.h"
 #include "ChatClientSession.h"
+#include "Lobby.h"

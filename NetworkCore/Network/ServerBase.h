@@ -19,6 +19,7 @@ private:
 
 protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;
+    virtual NetworkSection* select_first_section() abstract;
 
 private:
     SOCKET m_listen_socket;

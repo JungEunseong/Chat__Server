@@ -1,14 +1,6 @@
 ﻿#include "pch.h"
 #include "NetworkSection.h"
 
-NetworkSection::NetworkSection()
-{
-}
-
-NetworkSection::~NetworkSection()
-{
-}
-
 void NetworkSection::init(int section_id)
 {
     m_section_thread= std::thread([this](){ section_thread_work(); });
@@ -23,6 +15,11 @@ unsigned int NetworkSection::generate_section_id()
 HANDLE NetworkSection::get_iocp_handle()
 {
     return m_owner->get_iocp_handle();
+}
+
+ClientSession* NetworkSection::find_session(unsigned int session_id)
+{
+    return m_sessions.at(session_id);
 }
 
 void NetworkSection::enter_section(ClientSession* session)

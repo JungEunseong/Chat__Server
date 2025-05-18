@@ -8,7 +8,8 @@ public:
 
 protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;
-
-private:
+    NetworkSection* select_first_section() override;
     
+private:
+    class Lobby* m_lobby;
 };

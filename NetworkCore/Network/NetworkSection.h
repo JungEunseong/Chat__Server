@@ -12,8 +12,8 @@ struct task_cmp
 class NetworkSection
 {
 public:
-    NetworkSection();
-    ~NetworkSection();
+    NetworkSection() = default;
+    virtual ~NetworkSection() = default;
 public:
     void init(int section_id);
     
@@ -23,6 +23,10 @@ public:
     unsigned int get_id() const { return m_section_id; }
     HANDLE get_iocp_handle();
     NetworkCore* get_network_core() { return m_owner; }
+
+public:
+    ClientSession* find_session(unsigned int session_id);
+    
 public:
     virtual void enter_section(class ClientSession* session);
     virtual void exit_section(int session_id);
