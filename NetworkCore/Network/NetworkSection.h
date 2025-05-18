@@ -24,9 +24,11 @@ public:
     HANDLE get_iocp_handle();
     NetworkCore* get_network_core() { return m_owner; }
 public:
-    void enter_section(class ClientSession* session);
-    void exit_section(int session_id);
+    virtual void enter_section(class ClientSession* session);
+    virtual void exit_section(int session_id);
     void push_task(iTask* task);
+
+    void broadcast(std::shared_ptr<Packet> packet);
     
 private:
     void section_thread_work();

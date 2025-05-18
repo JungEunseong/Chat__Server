@@ -11,7 +11,7 @@ MultiSender::~MultiSender()
     
 }
 
-bool MultiSender::register_packet(Packet* packet)
+bool MultiSender::register_packet(std::shared_ptr<Packet> packet)
 {
     m_register_packet.push(packet);
     
@@ -26,11 +26,7 @@ bool MultiSender::register_packet(Packet* packet)
 bool MultiSender::on_send()
 {
     while(false == m_sending_packet.empty())
-    {
-        Packet* packet = m_sending_packet.front();
         m_sending_packet.pop();
-        xdelete packet;
-    }
 
     if(false == is_register_queue_empty())
         send();
@@ -46,7 +42,7 @@ bool MultiSender::send()
 
     while(false == m_register_packet.empty())
     {
-        Packet* packet = nullptr;
+        std::shared_ptr<Packet> packet;
         
         if(false == m_register_packet.try_pop(packet))
             continue;

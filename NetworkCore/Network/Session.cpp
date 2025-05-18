@@ -50,7 +50,7 @@ bool Session::do_recieve()
     return true;
 }
 
-bool Session::do_send(Packet* packet)
+bool Session::do_send(std::shared_ptr<Packet> packet)
 {
     m_multi_sender.register_packet(packet);
     return true;

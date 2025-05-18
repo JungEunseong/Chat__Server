@@ -52,6 +52,12 @@ void NetworkSection::push_task(iTask* task)
     m_task_queue.push(task);
 }
 
+void NetworkSection::broadcast(std::shared_ptr<Packet> packet)
+{
+    for (auto& session : m_sessions)
+        session.second->do_send(packet);
+}
+
 void NetworkSection::section_thread_work()
 {
     while(m_owner->is_running() == true)
