@@ -9,6 +9,7 @@ public:
 public:
 public:
    static bool socket_opt_setting(SOCKET socket);
+   static SOCKET create_socket();
    static bool register_socket(HANDLE iocp_handle, SOCKET socket);
    static bool bind(SOCKET socket, const char* ip, int port);
    static bool listen(SOCKET socket, int backlog = 1);

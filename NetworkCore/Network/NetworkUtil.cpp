@@ -17,6 +17,11 @@ NetworkUtil::NetworkUtil()
     }
 }
 
+SOCKET NetworkUtil::create_socket()
+{
+    return ::WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+}
+
 bool NetworkUtil::register_socket(HANDLE iocp_handle, SOCKET socket)
 {
     return ::CreateIoCompletionPort(reinterpret_cast<HANDLE>(socket), iocp_handle,0,0);

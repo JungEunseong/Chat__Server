@@ -8,6 +8,8 @@ void ServerBase::init(int iocp_thread_count, int section_count)
 {
     NetworkCore::init(iocp_thread_count);
     
+    m_listen_socket = NetworkUtil::create_socket();
+    
     for(int i = 0; i < section_count; ++i)
     {
         NetworkSection* section = xnew NetworkSection;
@@ -26,6 +28,8 @@ void ServerBase::open(std::string open_ip, int open_port, std::function<ClientSe
     for(int i = 0; i < accept_back_log; ++i)
     {
         AcceptIO* io = new AcceptIO;
+        io->m_socket = NetworkUtil::create_socket();
+        
         if(false == NetworkUtil::accept(m_listen_socket, io))
         {
             // TODO: STOP SERVER 
@@ -44,9 +48,9 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     session->set_socket(accept_io->m_socket);
 
     NetworkUtil::register_socket(m_iocp_handle, session->get_socket());
-
-    if(true == session->do_recieve())
-        m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
+    session->complete_connect();
+    
+    m_sections[0]->enter_section(session); // TODO: 로드 밸런싱 로직
     
     accept_io->Init();
     if(false == NetworkUtil::accept(m_listen_socket, accept_io))

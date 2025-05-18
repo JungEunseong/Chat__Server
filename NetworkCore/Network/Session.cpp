@@ -64,7 +64,7 @@ bool Session::do_disconnect()
     return true;
 }
 
-void Session::complete_connect(int bytes_transferred)
+void Session::complete_connect()
 {
     on_connected();
 

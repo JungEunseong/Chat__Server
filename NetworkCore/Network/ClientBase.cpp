@@ -11,8 +11,11 @@ void ClientBase::open(std::string connecting_ip, int connecting_port, std::funct
     {
         ServerSession* session = m_session_factory();
         session->set_id(Session::generate_session_id());
-        SOCKET socket = NetworkUtil::create
-        session->set_socket();
+        session->set_socket(NetworkUtil::create_socket());
+        session->set_remote_ip(connecting_ip.c_str());
+        session->set_remote_port(connecting_port);
+
+        session->do_connect();
     }
 }
 
@@ -23,7 +26,7 @@ void ClientBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
     switch(io->get_type())
     {
     case IoType::CONNECT:
-        session->complete_connect(bytes_transferred);
+        session->complete_connect();
         break;
     case IoType::DISCONNECT:
         session->complete_disconnect();
