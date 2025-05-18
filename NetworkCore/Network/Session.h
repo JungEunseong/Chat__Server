@@ -32,11 +32,11 @@ public:
     void complete_send(int bytes_transferred);
     void complete_disconnect();
 public:
-    virtual void on_connected();
+    virtual void on_connected() abstract;
     virtual int on_recieve();
-    virtual void on_send(int data_size);
-    virtual void on_disconnected();
-    virtual void execute_packet(Packet* packet) = 0;
+    virtual void on_send(int data_size) abstract;
+    virtual void on_disconnected() abstract;
+    virtual void execute_packet(Packet* packet) abstract;
     
 
     RecvBuffer& get_recv_buffer() { return m_recv_buffer; }
@@ -50,6 +50,7 @@ protected:
 
     RecvBuffer m_recv_buffer;
     MultiSender m_multi_sender;
+    ConnectIO m_connect_io;
     RecvIO m_recv_io;
     DisconnectIO m_disconnect_io;
 };

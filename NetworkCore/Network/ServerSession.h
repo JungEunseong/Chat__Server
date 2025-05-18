@@ -10,7 +10,7 @@ public:
 
 public:
     void on_connected() override;
-    int on_recieve() override;
+    int on_recieve() final;
     void on_send(int data_size) override;
     void on_disconnected() override;
     void execute_packet(Packet* packet) override;

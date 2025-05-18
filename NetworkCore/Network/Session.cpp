@@ -14,6 +14,30 @@ void Session::init()
     m_disconnect_io.set_session(this);
 }
 
+bool Session::do_connect()
+{
+    NetworkCore* network_core = get_network_core();
+    if (nullptr == network_core)
+    {
+        // TODO: LOG
+        return false;
+    }
+    
+    if (false == NetworkUtil::register_socket(network_core->get_iocp_handle(), m_connecting_socket))
+    {
+        // TODO: LOG
+        return false;    
+    }
+
+    if (false == NetworkUtil::connect(m_connecting_socket, &m_connect_io))
+    {
+        // TODO: LOG
+        return false;
+    }
+
+    return true;
+}
+
 bool Session::do_recieve()
 {
     if(false == NetworkUtil::receive(get_socket(), &m_recv_io))
@@ -42,7 +66,13 @@ bool Session::do_disconnect()
 
 void Session::complete_connect(int bytes_transferred)
 {
-    
+    on_connected();
+
+    if (false == do_recieve())
+    {
+        // TODO: LOG
+        return;
+    }
 }
 
 void Session::complete_recieve(int bytes_transferred)
