@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+
 #include <iostream>
 #include <WinSock2.h>
 #include <MSWSock.h>
@@ -22,7 +23,9 @@
 #include "Network/NetworkIO.h"
 #include "Network/NetworkCore.h"
 #include "Network/ServerBase.h"
+#include "Network/ClientBase.h"
 #include "Network/NetworkSection.h"
 #include "Network/MultiSender.h"
 #include "Network/Session.h"
 #include "Network/ClientSession.h"
+

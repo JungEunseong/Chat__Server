@@ -7,8 +7,7 @@ public:
     virtual ~ClientBase() = default;
 
 public:
-    void init();
-    void connect(std::string connecting_ip, int connecting_port, std::function<Session*()> session_factory);
+    void connect(std::string connecting_ip, int connecting_port, std::function<class ServerSession*()> session_factory);
 
 public:
     void on_connect(int bytes_transferred, NetworkIO* io);
@@ -25,5 +24,7 @@ private:
     std::thread m_job_thread;
     
     ConnectIO m_connect_io;
-    Session* m_session;
+    std::function<class ServerSession*()> m_session_factory;
+    
+    ServerSession* m_session;
 };
