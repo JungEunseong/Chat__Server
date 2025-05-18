@@ -67,8 +67,8 @@ bool MultiSender::send()
 
     if(true == is_not_pending)
     {
-        NetworkSection* section = m_owner->get_section();
-        if(nullptr == section)
+        NetworkCore* network_core = m_owner->get_network_core();
+        if(nullptr == network_core)
         {
             // TODO:LOG
             m_owner->do_disconnect();
@@ -76,7 +76,7 @@ bool MultiSender::send()
         }
         
         ULONG_PTR key = 0;
-        if(0 == ::PostQueuedCompletionStatus(section->get_iocp_handle(), send_byte_size, key, &m_send_io))
+        if(0 == ::PostQueuedCompletionStatus(network_core->get_iocp_handle(), send_byte_size, key, &m_send_io))
         {
             //TODO: LOG
             m_owner->do_disconnect();

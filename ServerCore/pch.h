@@ -25,3 +25,4 @@
 #include "Network/NetworkSection.h"
 #include "Network/MultiSender.h"
 #include "Network/Session.h"
+#include "Network/ClientSession.h"

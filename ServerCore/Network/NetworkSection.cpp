@@ -25,7 +25,7 @@ HANDLE NetworkSection::get_iocp_handle()
     return m_owner->get_iocp_handle();
 }
 
-void NetworkSection::enter_section(Session* session)
+void NetworkSection::enter_section(ClientSession* session)
 {
     if(m_sessions.count(session->get_id()) != 0)
     {
@@ -41,7 +41,7 @@ void NetworkSection::exit_section(int session_id)
     if(m_sessions.count(session_id) == 0)
         return;
     
-    Session* session = m_sessions.at(session_id);
+    ClientSession* session = m_sessions.at(session_id);
     session->set_section(nullptr);
     m_sessions.erase(session_id);
 }

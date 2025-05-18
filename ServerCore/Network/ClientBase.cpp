@@ -1,6 +1,10 @@
 ﻿#include "pch.h"
 #include "ClientBase.h"
 
+void ClientBase::on_connect(int bytes_transferred, NetworkIO* io)
+{
+}
+
 void ClientBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
 {
     Session* session = io->get_session();
@@ -23,3 +27,18 @@ void ClientBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
         // TODO: error log
         break;
     }}
+
+void ClientBase::job_thread_work()
+{
+    while(is_running() == true)
+    {
+        Packet* packet;
+
+        if(false == m_packet_queue.try_pop(packet))
+            continue;
+        
+        Session* session = packet->get_owner();
+        
+        session->execute_packet(packet);
+    }
+}

@@ -81,9 +81,6 @@ void Session::complete_send(int bytes_transferred)
 void Session::complete_disconnect()
 {
     on_disconnected();
-    
-    m_section->exit_section(get_id());
-    m_section = nullptr;
 }
 
 int Session::on_recieve()
@@ -103,14 +100,8 @@ int Session::on_recieve()
         packet->set_packet(m_recv_buffer.GetReadPos() + complete_byte_length, header.packet_size);
         packet->set_owner(this);
 
-        if (nullptr == m_section)
-        {
-            //TODO: LOG
-            do_disconnect();
-            return 0;
-        }
         
-        NetworkCore* network_core = m_section->get_network_core();
+        NetworkCore* network_core = get_network_core();
         if (nullptr == network_core)
         {
             //TODO: LOG
@@ -126,7 +117,7 @@ int Session::on_recieve()
     return complete_byte_length;
 }
 
-unsigned int Session::get_section_id()
+void Session::on_disconnected()
 {
-    return m_section->get_id();
+    
 }

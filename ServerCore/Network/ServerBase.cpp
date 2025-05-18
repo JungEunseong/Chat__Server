@@ -16,7 +16,7 @@ void ServerBase::init(int iocp_thread_count, int section_count)
         m_sections.emplace(section_id, section);
     }
 }
-void ServerBase::open(std::string open_ip, int open_port, std::function<Session*()> session_factory, int accept_back_log)
+void ServerBase::open(std::string open_ip, int open_port, std::function<ClientSession*()> session_factory, int accept_back_log)
 {
     m_session_factory = session_factory;
     NetworkUtil::register_socket(m_iocp_handle, m_listen_socket);
@@ -39,7 +39,7 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
     
     AcceptIO* accept_io = reinterpret_cast<AcceptIO*>(io);
 
-    Session* session = m_session_factory();
+    ClientSession* session = m_session_factory();
     session->set_id(Session::generate_session_id());
     session->set_socket(accept_io->m_socket);
 
@@ -65,7 +65,7 @@ void ServerBase::central_thread_work()
         if(false == m_packet_queue.try_pop(packet))
             continue;
         
-        Session* session = packet->get_owner();
+        ClientSession* session = static_cast<ClientSession*>(packet->get_owner());
        
         iTask* task = xnew iTask;
         task->func = [&]() { session->execute_packet(packet); };

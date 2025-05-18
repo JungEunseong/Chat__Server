@@ -20,6 +20,7 @@ public:
     void set_remote_ip(const char* ip){ m_remote_ip = std::string(ip); }
     void set_remote_ip(std::string&& ip){ m_remote_ip = ip; }
     void set_remote_port(int port){ m_remote_ip = port; }
+    virtual NetworkCore* get_network_core() abstract;
 public:
     bool do_connect();
     bool do_recieve();
@@ -39,24 +40,16 @@ public:
     
 
     RecvBuffer& get_recv_buffer() { return m_recv_buffer; }
-
-    unsigned int get_section_id();
-    class NetworkSection* get_section()  { return m_section; }
-    void set_section(class NetworkSection* section) { m_section = section; }
-
     RecvIO& get_recv_io(){ return m_recv_io; }
-private:
+protected:
     int m_session_id;
     
     SOCKET m_connecting_socket;
     std::string m_remote_ip;
     int m_remote_port;
 
-    class NetworkSection* m_section;
-    
     RecvBuffer m_recv_buffer;
     MultiSender m_multi_sender;
     RecvIO m_recv_io;
     DisconnectIO m_disconnect_io;
-    
 };

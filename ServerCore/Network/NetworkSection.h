@@ -24,7 +24,7 @@ public:
     HANDLE get_iocp_handle();
     NetworkCore* get_network_core() { return m_owner; }
 public:
-    void enter_section(Session* session);
+    void enter_section(class ClientSession* session);
     void exit_section(int session_id);
     void push_task(iTask* task);
     
@@ -36,7 +36,7 @@ private:
 
     class ServerBase* m_owner; 
     std::thread m_section_thread;
-    std::map<unsigned int, Session*> m_sessions;
+    std::map<unsigned int, class ClientSession*> m_sessions;
     
     Concurrency::concurrent_priority_queue<iTask*, task_cmp> m_task_queue;
 };
