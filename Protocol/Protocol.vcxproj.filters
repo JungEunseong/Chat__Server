@@ -18,21 +18,21 @@
     <ClInclude Include="pch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PacketNumber.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="iSerializeObject.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="iProtocol.h">
+    <ClInclude Include="PacketNumber.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Protocol.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="iProtocol.cpp">
+    <ClCompile Include="iSerializeObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

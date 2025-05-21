@@ -74,8 +74,8 @@ public:
     {
         size_t data_size = sizeof(t);
         
-        ::memcpy_s(data, data_size, get_current_idx_ptr(), data_size);
-        m_current_idx += data_size;
+        ::memcpy_s(&data, data_size, get_current_idx_ptr(), data_size);
+        m_current_idx += static_cast<int>(data_size);
     }
     
     void pop(void* data, size_t size)
