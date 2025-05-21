@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "ServerBase.h"
 
 struct task_cmp
 {

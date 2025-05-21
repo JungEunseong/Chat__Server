@@ -62,7 +62,12 @@ public:
         ::memcpy_s(get_current_idx_ptr(), data_size, data.data(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
-    
+
+    template <typename... Types>
+    void push(Types&... args)
+    {
+        push(args...);
+    }
     /* --------------------------------------------- pop --------------------------------------------- */
     template<typename t>
     void pop(t& data)
@@ -92,7 +97,12 @@ public:
         m_current_idx += static_cast<int>(data_size);
     }
     
-
+    template <typename... Types>
+    void pop(Types&... args)
+    {
+        pop(args...);
+    }
+    
 private:
     void* get_size_ptr() { return m_buffer.data(); }
     void* get_protocol_ptr() { return m_buffer.data() + PACKET_SIZE_SIZEOF; }
@@ -106,3 +116,25 @@ private:
     Session* m_owner;
 };
 
+#define DEFINE_SERIALIZER(...) \
+    void Write(Packet& p) \
+    { \
+        p.push(__VA_ARGS__); \
+    } \
+    void Read(Packet& p) \
+    { \
+        p.pop(__VA_ARGS__); \
+    } \
+
+
+#define DEFINE_SERIALIZER_WITH_PARENT(parent, ...) \
+void Write(Packet& p) \
+{ \
+    parent::Write(p); \
+    p.push(__VA_ARGS__); \
+} \
+void Read(Packet& p) \
+{ \
+    parent::Write(p); \
+    p.pop(__VA_ARGS__); \
+} \
