@@ -56,6 +56,15 @@ bool Session::do_send(std::shared_ptr<Packet> packet)
     return true;
 }
 
+bool Session::do_send(iProtocol protocol)
+{
+    std::shared_ptr<Packet> p = std::make_shared<Packet>();
+    protocol.Write(*(p.get()));
+    p->finalize();
+
+    return do_send(p);
+}
+
 bool Session::do_disconnect()
 {
     if (false == NetworkUtil::disconnect(m_connecting_socket, &m_disconnect_io))
@@ -152,4 +161,15 @@ int Session::on_recieve()
 void Session::on_disconnected()
 {
     
+}
+
+void Session::execute_packet(Packet* packet)
+{
+    if (0 == m_handlers.count(packet->get_protocol()))
+    {
+        // TODO: 로그
+        return;
+    }
+
+    m_handlers[packet->get_protocol()](packet);
 }

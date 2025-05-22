@@ -7,11 +7,16 @@
     <ClCompile Include="Network\NetworkUtil.cpp" />
     <ClCompile Include="Network\Packet.cpp" />
     <ClCompile Include="Network\Session.cpp" />
-    <ClCompile Include="Network\Acceptor.cpp" />
     <ClCompile Include="Network\iChannel.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="Network\RecvBuffer.cpp" />
+    <ClCompile Include="CoreIncludes.cpp" />
+    <ClCompile Include="Network\ClientBase.cpp" />
+    <ClCompile Include="Network\ClientSession.cpp" />
+    <ClCompile Include="Network\MultiSender.cpp" />
+    <ClCompile Include="Network\NetworkSection.cpp" />
+    <ClCompile Include="Network\ServerBase.cpp" />
+    <ClCompile Include="Network\ServerSession.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Network\iTask.h" />
@@ -21,9 +26,15 @@
     <ClInclude Include="Network\Packet.h" />
     <ClInclude Include="Network\RecvBuffer.h" />
     <ClInclude Include="Network\Session.h" />
-    <ClInclude Include="Network\stdafx.h" />
-    <ClInclude Include="Network\Acceptor.h" />
     <ClInclude Include="Network\iChannel.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="CoreIncludes.h" />
+    <ClInclude Include="Network\Base.h" />
+    <ClInclude Include="Network\ClientBase.h" />
+    <ClInclude Include="Network\ClientSession.h" />
+    <ClInclude Include="Network\MultiSender.h" />
+    <ClInclude Include="Network\NetworkSection.h" />
+    <ClInclude Include="Network\ServerBase.h" />
+    <ClInclude Include="Network\ServerSession.h" />
   </ItemGroup>
 </Project>

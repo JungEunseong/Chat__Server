@@ -56,5 +56,7 @@ void ClientBase::job_thread_work()
         Session* session = packet->get_owner();
         
         session->execute_packet(packet);
+
+        xdelete packet;
     }
 }

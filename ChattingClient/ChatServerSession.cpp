@@ -11,7 +11,18 @@ void ChatServerSession::on_connected()
     ServerSession::on_connected();
     std::cout << "연결 완료" << std::endl;
 
-    m_logic_thread = std::thread(logic_thread);
+    std::wstring name;
+    std::wcin >> name;
+
+    C2S_REQ_LOGIN send_packet_to_server;
+    send_packet_to_server.nickname = name;
+
+    if (false == do_send(send_packet_to_server))
+    {
+        // TODO: LOG
+        do_disconnect();
+        return;
+    }
 }
 
 void ChatServerSession::on_send(int data_size)

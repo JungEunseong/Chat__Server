@@ -19,6 +19,7 @@ class Packet
 
 public:
     Packet();
+    Packet(Packet* packet);
     ~Packet();
 
     void set_packet(char* data, int size);

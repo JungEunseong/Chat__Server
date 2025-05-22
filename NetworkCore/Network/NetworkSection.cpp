@@ -55,6 +55,15 @@ void NetworkSection::broadcast(std::shared_ptr<Packet> packet)
         session.second->do_send(packet);
 }
 
+void NetworkSection::broadcast(class iProtocol protocol)
+{
+    std::shared_ptr<Packet> packet = std::make_shared<Packet>();
+    protocol.Write(*packet.get());
+    packet->finalize();
+
+    broadcast(packet);
+}
+
 void NetworkSection::section_thread_work()
 {
     while(m_owner->is_running() == true)

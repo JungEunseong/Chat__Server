@@ -1,4 +1,5 @@
 #pragma once
+#include "PacketNumber.h"
 #include "RecvBuffer.h"
 
 class Session
@@ -10,7 +11,7 @@ public:
 public:
     static int generate_session_id();
 public:
-    void init();
+    virtual void init();
 public:
     int get_id() { return m_session_id; };
     void set_id(int id) { m_session_id = id; };
@@ -25,6 +26,7 @@ public:
     bool do_connect();
     bool do_recieve();
     bool do_send(std::shared_ptr<Packet> packet);
+    bool do_send(class iProtocol protocol);
     bool do_disconnect();
 
     void complete_connect();
@@ -36,7 +38,7 @@ public:
     virtual int on_recieve();
     virtual void on_send(int data_size) abstract;
     virtual void on_disconnected() abstract;
-    virtual void execute_packet(Packet* packet) abstract;
+    virtual void execute_packet(Packet* packet);
     
 
     RecvBuffer& get_recv_buffer() { return m_recv_buffer; }
@@ -52,4 +54,6 @@ protected:
     ConnectIO m_connect_io;
     RecvIO m_recv_io;
     DisconnectIO m_disconnect_io;
+
+    std::map<unsigned short, std::function<void(Packet*)>> m_handlers;
 };
