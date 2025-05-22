@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChattingServer", "ChattingS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Protocol", "Protocol\Protocol.vcxproj", "{B162B705-8592-455C-AC86-799AED4E8F16}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChattingClient", "ChattingClient\ChattingClient.vcxproj", "{CBB275E3-4954-489C-BDED-F6DAB574FAF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{B162B705-8592-455C-AC86-799AED4E8F16}.Release|x64.Build.0 = Release|x64
 		{B162B705-8592-455C-AC86-799AED4E8F16}.Release|x86.ActiveCfg = Release|Win32
 		{B162B705-8592-455C-AC86-799AED4E8F16}.Release|x86.Build.0 = Release|Win32
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Debug|x64.ActiveCfg = Debug|x64
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Debug|x64.Build.0 = Debug|x64
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Debug|x86.ActiveCfg = Debug|Win32
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Debug|x86.Build.0 = Debug|Win32
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Release|x64.ActiveCfg = Release|x64
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Release|x64.Build.0 = Release|x64
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Release|x86.ActiveCfg = Release|Win32
+		{CBB275E3-4954-489C-BDED-F6DAB574FAF4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

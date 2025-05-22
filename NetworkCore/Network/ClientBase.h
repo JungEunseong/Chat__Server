@@ -8,7 +8,7 @@ public:
 
 public:
     void open(std::string connecting_ip, int connecting_port, std::function<class ServerSession*()> session_factory, int
-              session_count);
+              session_count = 1);
 
 protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;

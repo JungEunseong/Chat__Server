@@ -43,6 +43,7 @@ public:
     RecvIO& get_recv_io(){ return m_recv_io; }
 protected:
     int m_session_id;
+    bool m_is_connected;
     
     SOCKET m_connecting_socket;
 

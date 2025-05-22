@@ -16,6 +16,8 @@ void ClientBase::open(std::string connecting_ip, int connecting_port, std::funct
         session->set_remote_port(connecting_port);
 
         session->do_connect();
+
+        m_sessions.emplace(session->get_id(), session);
     }
 }
 

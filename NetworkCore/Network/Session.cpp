@@ -66,6 +66,7 @@ bool Session::do_disconnect()
 
 void Session::complete_connect()
 {
+    m_is_connected = true;
     on_connected();
 
     if (false == do_recieve())
@@ -110,6 +111,7 @@ void Session::complete_send(int bytes_transferred)
 
 void Session::complete_disconnect()
 {
+    m_is_connected = false;
     on_disconnected();
 }
 
