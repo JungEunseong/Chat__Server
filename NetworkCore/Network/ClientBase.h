@@ -7,6 +7,8 @@ public:
     virtual ~ClientBase() = default;
 
 public:
+    void init(int iocp_thread_count = 1) override;
+public:
     void open(std::string connecting_ip, int connecting_port, std::function<class ServerSession*()> session_factory, int
               session_count = 1);
 

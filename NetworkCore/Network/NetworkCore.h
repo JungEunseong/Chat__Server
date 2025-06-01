@@ -11,7 +11,7 @@ public:
     HANDLE get_iocp_handle() { return m_iocp_handle; }
     
 public:
-    void init(int iocp_thread_count);
+    virtual void init(int iocp_thread_count);
 public:
     bool is_running() { return m_is_running; }
 

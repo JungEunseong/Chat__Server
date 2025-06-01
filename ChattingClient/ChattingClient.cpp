@@ -5,7 +5,8 @@
 int main()
 {
     ChatClientService service;
-    service.open("127.0.0.1", 9999, []() { return xnew ChatServerSession; });
+    service.init(1);
+    service.open("127.0.0.1", 7777, []() { return xnew ChatServerSession; });
 
     while (true)
     {

@@ -7,6 +7,7 @@ public:
     ~ServerSession() override = default;
 public:
     NetworkCore* get_network_core() override { return m_owner; }
+    void set_network_core(class ClientBase* owner) { m_owner = owner; }
 
 public:
     void on_connected() override;

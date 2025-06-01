@@ -1,8 +1,9 @@
 ﻿#include "pch.h"
 #include "NetworkSection.h"
 
-void NetworkSection::init(int section_id)
+void NetworkSection::init(ServerBase* owner, int section_id)
 {
+    m_owner = owner;
     m_section_thread= std::thread([this](){ section_thread_work(); });
 }
 

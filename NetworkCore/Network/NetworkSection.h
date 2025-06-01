@@ -14,7 +14,7 @@ public:
     NetworkSection() = default;
     virtual ~NetworkSection() = default;
 public:
-    void init(int section_id);
+    void init(ServerBase* owner, int section_id);
     
 public:
     static unsigned int generate_section_id();

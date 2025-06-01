@@ -17,7 +17,7 @@ public:
 
     void Init()
     {
-        ::memset(this,0, sizeof(OVERLAPPED));
+       ZeroMemory(this, sizeof(OVERLAPPED));
     }
 
 public:

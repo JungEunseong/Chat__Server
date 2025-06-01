@@ -5,7 +5,11 @@
 class Session
 {
 public:
-    Session() : m_multi_sender(this) { }
+    Session() : m_multi_sender(this)
+    {
+        m_recv_io.set_session(this);
+        m_disconnect_io.set_session(this);
+    }
     virtual ~Session() = default;
 
 public:
@@ -17,10 +21,21 @@ public:
     void set_id(int id) { m_session_id = id; };
 
     SOCKET get_socket() { return m_connecting_socket; }
+
+    std::string& get_remote_ip(){ return m_remote_ip; }
+    int get_remote_port(){ return m_remote_port; }
     void set_socket(SOCKET socket){ m_connecting_socket = socket; }
-    void set_remote_ip(const char* ip){ m_connect_io.m_ip = std::string(ip); }
-    void set_remote_ip(std::string&& ip){ m_connect_io.m_ip = ip; }
-    void set_remote_port(int port){ m_connect_io.m_port = port; }
+    void set_remote_ip(const char* ip)
+    {
+        m_connect_io.m_ip = std::string(ip);
+        m_remote_ip = ip;
+    }
+    void set_remote_ip(std::string&& ip) { set_remote_ip(ip.c_str()); }
+    void set_remote_port(int port)
+    {
+        m_connect_io.m_port = port;
+        m_remote_port = port;
+    }
     virtual NetworkCore* get_network_core() abstract;
 public:
     bool do_connect();
@@ -48,6 +63,8 @@ protected:
     bool m_is_connected;
     
     SOCKET m_connecting_socket;
+    std::string m_remote_ip;
+    int m_remote_port;
 
     RecvBuffer m_recv_buffer;
     MultiSender m_multi_sender;

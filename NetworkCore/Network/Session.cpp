@@ -10,8 +10,6 @@ int Session::generate_session_id()
 
 void Session::init()
 {
-    m_recv_io.set_session(this);
-    m_disconnect_io.set_session(this);
 }
 
 bool Session::do_connect()
@@ -19,21 +17,28 @@ bool Session::do_connect()
     NetworkCore* network_core = get_network_core();
     if (nullptr == network_core)
     {
+        std::wcout << "network_core is nullptr" << std::endl;
         // TODO: LOG
         return false;
     }
-    
+
     if (false == NetworkUtil::register_socket(network_core->get_iocp_handle(), m_connecting_socket))
     {
+        std::wcout << "register socket fail" << std::endl;
         // TODO: LOG
         return false;    
     }
 
-    if (false == NetworkUtil::connect(m_connecting_socket, &m_connect_io))
+    m_connect_io.Init();
+    bool is_not_pending = false;
+    if (false == NetworkUtil::connect(m_connecting_socket, &m_connect_io, is_not_pending))
     {
         // TODO: LOG
         return false;
     }
+
+    if (is_not_pending)
+        complete_connect();
 
     return true;
 }
@@ -80,6 +85,7 @@ void Session::complete_connect()
 
     if (false == do_recieve())
     {
+        std::wcout << L"recieve fail" << std::endl;
         // TODO: LOG
         return;
     }

@@ -12,7 +12,7 @@ RecvBuffer::RecvBuffer(int buffer_size)
     {
         //TODO: crash
     }
-    m_buffer.reserve(buffer_size);
+    m_buffer = new char[buffer_size];
     m_max_buffer_size = buffer_size;
     m_read_pos = 0;
     m_write_pos = 0;
@@ -20,7 +20,7 @@ RecvBuffer::RecvBuffer(int buffer_size)
 
 RecvBuffer::~RecvBuffer()
 {
-    m_buffer.clear();
+    delete[] m_buffer;
 }
 
 bool RecvBuffer::OnRead(int data_size)

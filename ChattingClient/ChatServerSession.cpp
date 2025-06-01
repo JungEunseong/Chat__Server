@@ -1,6 +1,13 @@
 ﻿#include "pch.h"
 #include "ChatServerSession.h"
 
+void ChatServerSession::init()
+{
+    ServerSession::init();
+    
+    m_handlers.emplace(packet_number::LOGIN, [this](auto* p){this->login_hadler(p); });
+}
+
 NetworkCore* ChatServerSession::get_network_core()
 {
     return ServerSession::get_network_core();
@@ -9,7 +16,7 @@ NetworkCore* ChatServerSession::get_network_core()
 void ChatServerSession::on_connected()
 {
     ServerSession::on_connected();
-    std::cout << "연결 완료" << std::endl;
+    std::wcout << L"연결 완료" << std::endl;
 
     std::wstring name;
     std::wcin >> name;
@@ -40,7 +47,7 @@ void ChatServerSession::execute_packet(Packet* packet)
     ServerSession::execute_packet(packet);
 }
 
-void ChatServerSession::logic_thread()
+void ChatServerSession::logic_thread_work()
 {
     while (true == m_is_connected)
     {
@@ -57,4 +64,14 @@ void ChatServerSession::logic_thread()
             // TODO: Chatting
         }
     }
+}
+
+void ChatServerSession::login_hadler(Packet* packet)
+{
+    S2C_RES_LOGIN recv_packet_from_server;
+    recv_packet_from_server.Read(*packet);
+
+    std::wcout << recv_packet_from_server.nickname << L"님이 입장하셨습니다" << std::endl;
+
+    m_logic_thread = std::thread([this](){ logic_thread_work(); });
 }
