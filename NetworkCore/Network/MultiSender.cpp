@@ -48,7 +48,7 @@ bool MultiSender::send()
             continue;
             
         WSABUF buf;
-        buf.buf = packet->get_buffer().data();
+        buf.buf = packet->get_buffer();
         buf.len = packet->get_size();
         
         m_send_io.m_buffers.emplace_back(buf);

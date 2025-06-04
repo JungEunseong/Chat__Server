@@ -27,11 +27,11 @@ public:
     Session* get_owner(); 
 public:
 
-    void initialize(unsigned short protocol_no) { *(static_cast<unsigned short*>(get_protocol_ptr())) = protocol_no; }
-    void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_buffer.size()); }
-    unsigned short get_size() const { return *m_buffer.data(); }
-    unsigned short get_protocol() const { return *(m_buffer.data() + PACKET_SIZE_SIZEOF); }
-    std::vector<char>& get_buffer() {return m_buffer; }
+    void initialize() { m_current_idx = 0; }
+    void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_current_idx); }
+    unsigned short get_size() const { return *m_buffer; }
+    unsigned short get_protocol() const { return *(m_buffer + PACKET_SIZE_SIZEOF); }
+    char* get_buffer() {return m_buffer; }
 
 public:
     
@@ -67,7 +67,7 @@ public:
     template <typename... Types>
     void push(Types&... args)
     {
-        push(args...);
+         (push(args), ...); // C++ 17 fold expression
     }
     /* --------------------------------------------- pop --------------------------------------------- */
     template<typename t>
@@ -105,12 +105,12 @@ public:
     }
     
 private:
-    void* get_size_ptr() { return m_buffer.data(); }
-    void* get_protocol_ptr() { return m_buffer.data() + PACKET_SIZE_SIZEOF; }
-    void* get_current_idx_ptr() {return m_buffer.data() + PACKET_SIZE_SIZEOF + m_current_idx; }
+    void* get_size_ptr() { return m_buffer; }
+    void* get_protocol_ptr() { return m_buffer + PACKET_SIZE_SIZEOF; }
+    void* get_current_idx_ptr() {return m_buffer + PACKET_SIZE_SIZEOF + m_current_idx; }
 
 private:
-    std::vector<char> m_buffer;
+    char* m_buffer; // TODO: use buffer pool
     int m_current_idx;
 
     // For Read 

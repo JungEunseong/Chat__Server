@@ -3,6 +3,7 @@
 
 Packet::Packet()
 {
+    m_buffer = xnew char[PACKET_MAX_SIZE] {0, };
 }
 
 Packet::Packet(Packet* packet)
@@ -14,11 +15,12 @@ Packet::Packet(Packet* packet)
 
 Packet::~Packet()
 {
+    xdelete[] m_buffer;
 }
 
 void Packet::set_packet(char* data, int size)
 {
-    memcpy(m_buffer.data(), data, size);  
+    memcpy(m_buffer, data, size);  
 }
 
 void Packet::set_owner(Session* session)

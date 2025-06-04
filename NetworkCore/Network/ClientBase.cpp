@@ -28,7 +28,7 @@ void ClientBase::open(std::string connecting_ip, int connecting_port, std::funct
         my_addr.sin_family = AF_INET;
         my_addr.sin_addr.s_addr = ::htonl(INADDR_ANY);
         my_addr.sin_port = ::htons(0);
-        if (SOCKET_ERROR == NetworkUtil::bind(session->get_socket(), my_addr))
+        if (false == NetworkUtil::bind(session->get_socket(), my_addr))
         {
             std::wcout << L"bind error" << std::endl;
             return;
