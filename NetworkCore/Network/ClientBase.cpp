@@ -34,8 +34,8 @@ void ClientBase::open(std::string connecting_ip, int connecting_port, std::funct
             return;
         }
         
-        if (true == session->do_connect())
-            std::wcout << L"Connecting..." << std::endl;
+        std::wcout << L"Connecting..." << std::endl;
+        session->do_connect();
 
         m_sessions.emplace(session->get_id(), session);
     }
@@ -45,7 +45,7 @@ void ClientBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
 {
     Session* session = io->get_session();
 
-    std::wcout << "io in, type: " << io->get_type() << std::endl;
+    std::wcout << "io in, type: " << io->get_type() << " io size: " << bytes_transferred << std::endl;
     
     switch(io->get_type())
     {

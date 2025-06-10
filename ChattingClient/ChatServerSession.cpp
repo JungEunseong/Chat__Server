@@ -16,7 +16,7 @@ NetworkCore* ChatServerSession::get_network_core()
 void ChatServerSession::on_connected()
 {
     ServerSession::on_connected();
-    std::wcout << L"연결 완료" << std::endl;
+    std::wcout << L"connect success" << std::endl;
 
     std::wstring name;
     std::wcin >> name;

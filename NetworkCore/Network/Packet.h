@@ -28,7 +28,7 @@ public:
 public:
 
     void initialize() { m_current_idx = 0; }
-    void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_current_idx); }
+    void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_current_idx) + PACKET_SIZE_SIZEOF; }
     unsigned short get_size() const { return *m_buffer; }
     unsigned short get_protocol() const { return *(m_buffer + PACKET_SIZE_SIZEOF); }
     char* get_buffer() {return m_buffer; }

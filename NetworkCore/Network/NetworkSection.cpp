@@ -32,6 +32,7 @@ void NetworkSection::enter_section(ClientSession* session)
     }
     
     m_sessions.emplace(session->get_id(), session);
+   session->set_section(this);
 }
 
 void NetworkSection::exit_section(int session_id)

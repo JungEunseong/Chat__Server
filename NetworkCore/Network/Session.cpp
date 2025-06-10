@@ -39,6 +39,7 @@ bool Session::do_connect()
 
     if (is_not_pending)
         complete_connect();
+        
 
     return true;
 }
@@ -75,7 +76,8 @@ bool Session::do_disconnect()
 {
     if (false == NetworkUtil::disconnect(m_connecting_socket, &m_disconnect_io))
         return false;
-    
+
+    std::wcout << L"do disconnect session id " << get_id() << std::endl;
     return true;
 }
 
