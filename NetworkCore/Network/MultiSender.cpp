@@ -67,6 +67,7 @@ bool MultiSender::send()
         if(nullptr == network_core)
         {
             // TODO:LOG
+            std::wcout << L"network core is null" << std::endl;
             m_owner->do_disconnect();
             return false;
         }

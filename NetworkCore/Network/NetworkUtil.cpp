@@ -175,7 +175,7 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
     {
         int err_code = ::GetLastError();
 
-        if(err_code == WSA_IO_PENDING)
+        if(err_code != WSA_IO_PENDING)
         {
 		    std::wcout << L"recv error: " << err_code << std::endl;
             // TODO: 로그

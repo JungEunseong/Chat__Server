@@ -7,6 +7,8 @@
 void ServerBase::init(int iocp_thread_count, int section_count)
 {
     NetworkCore::init(iocp_thread_count);
+
+    m_central_thread = std::thread(&ServerBase::central_thread_work, this); 
     
     m_listen_socket = NetworkUtil::create_socket();
     
@@ -49,6 +51,7 @@ void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
 
     
     ClientSession* session = m_session_factory();
+    session->init();
     session->set_id(Session::generate_session_id());
     session->set_socket(accept_io->m_socket);
 

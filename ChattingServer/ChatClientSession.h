@@ -16,8 +16,6 @@ public:
     void on_send(int data_size) override;
     void on_disconnected() override;
     
-    void execute_packet(Packet* packet) override;
-
 public:
     void login_hadler(Packet* packet);
 

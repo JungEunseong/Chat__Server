@@ -140,7 +140,7 @@ int Session::on_recieve()
     while(true)
     {
         int remain_len = m_recv_buffer.GetDataSize() - complete_byte_length;
-        if(remain_len > PACKET_HEADER_SIZEOF) break;
+        if(remain_len < PACKET_HEADER_SIZEOF) break;
 
         PacketHeader header = *(reinterpret_cast<PacketHeader*>(m_recv_buffer.GetReadPos() + complete_byte_length));
         

@@ -17,7 +17,3 @@ void ServerSession::on_send(int data_size)
 void ServerSession::on_disconnected()
 {
 }
-
-void ServerSession::execute_packet(Packet* packet)
-{
-}

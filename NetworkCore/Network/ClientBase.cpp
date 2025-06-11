@@ -6,6 +6,7 @@
 void ClientBase::init(int iocp_thread_count)
 {
     NetworkCore::init(iocp_thread_count);
+    m_job_thread = std::thread(&ClientBase::job_thread_work, this); 
 }
 
 void ClientBase::open(std::string connecting_ip, int connecting_port, std::function<ServerSession*()> session_factory, int session_count)
@@ -15,6 +16,7 @@ void ClientBase::open(std::string connecting_ip, int connecting_port, std::funct
     for (int i = 0; i < session_count; ++i)
     {
         ServerSession* session = m_session_factory();
+        session->init();
         
         
         session->set_id(Session::generate_session_id());

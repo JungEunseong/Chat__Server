@@ -29,11 +29,6 @@ void ChatClientSession::on_disconnected()
     ClientSession::on_disconnected();
 }
 
-void ChatClientSession::execute_packet(Packet* packet)
-{
-    ClientSession::execute_packet(packet);
-}
-
 void ChatClientSession::login_hadler(Packet* packet)
 {
    C2S_REQ_LOGIN recv_packet_from_client;

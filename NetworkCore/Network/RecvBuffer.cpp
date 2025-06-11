@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "RecvBuffer.h"
 
-RecvBuffer::RecvBuffer()
+RecvBuffer::RecvBuffer() : RecvBuffer(/*TODO: const value*/65535 * 3)
 {
-    RecvBuffer(/*TODO: const value*/65535 * 3);
 }
 
 RecvBuffer::RecvBuffer(int buffer_size)
@@ -49,7 +48,7 @@ void RecvBuffer::Clean()
     int data_size = GetDataSize();
     if(data_size == 0)
         m_read_pos = m_write_pos = 0;
-    else if(data_size < /*TODO: const value*/65535)
+    else if(data_size < /*TODO: const value*/65535 && m_read_pos > 0)
     {
         ::memcpy_s(&m_buffer[0], m_read_pos, &m_buffer[m_read_pos], data_size);
         m_read_pos = 0;

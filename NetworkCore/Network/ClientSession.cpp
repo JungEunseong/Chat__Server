@@ -28,7 +28,3 @@ void ClientSession::on_disconnected()
     m_section->exit_section(get_id());
     m_section = nullptr;
 }
-
-void ClientSession::execute_packet(Packet* packet)
-{
-}

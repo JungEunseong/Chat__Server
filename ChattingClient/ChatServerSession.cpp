@@ -42,11 +42,6 @@ void ChatServerSession::on_disconnected()
     ServerSession::on_disconnected();
 }
 
-void ChatServerSession::execute_packet(Packet* packet)
-{
-    ServerSession::execute_packet(packet);
-}
-
 void ChatServerSession::logic_thread_work()
 {
     while (true == m_is_connected)

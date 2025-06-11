@@ -9,7 +9,6 @@ public:
     void on_connected() override;
     void on_send(int data_size) override;
     void on_disconnected() override;
-    void execute_packet(Packet* packet) override;
 
 private:
     void logic_thread_work();
