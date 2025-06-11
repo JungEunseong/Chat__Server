@@ -55,12 +55,12 @@ public:
     }
     void push(char* data, int size) { push(reinterpret_cast<void*>(data), size); }
 
-    void push(const std::string_view& data)
+    void push(std::wstring& data)
     {
         size_t data_size = data.size();
         //TODO: stop(current_idx + size >= PACKET_MAX_SIZE)
         
-        ::memcpy_s(get_current_idx_ptr(), data_size, data.data(), data_size);
+        ::memcpy_s(get_current_idx_ptr(), data_size, data.c_str(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
 
@@ -89,25 +89,25 @@ public:
 
     void pop(char* data, int size) { pop(reinterpret_cast<void*>(data), size); }
 
-    void pop(std::string_view& data)
+    void pop(std::wstring& data)
     {
         const size_t data_size = data.size();
         //TODO: stop(current_idx + size >= PACKET_MAX_SIZE)
         
-        ::memcpy_s(const_cast<char*>(data.data()), data_size, get_current_idx_ptr(), data_size);
+        ::memcpy_s(const_cast<wchar_t*>(data.c_str()), data_size, get_current_idx_ptr(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
     
     template <typename... Types>
     void pop(Types&... args)
     {
-        pop(args...);
+        (pop(args), ...); // C++ 17 fold expression
     }
     
 private:
-    void* get_size_ptr() { return m_buffer; }
     void* get_protocol_ptr() { return m_buffer + PACKET_SIZE_SIZEOF; }
-    void* get_current_idx_ptr() {return m_buffer + PACKET_SIZE_SIZEOF + m_current_idx; }
+    void* get_size_ptr() { return m_buffer; }
+    void* get_current_idx_ptr() {return (m_buffer + PACKET_SIZE_SIZEOF + m_current_idx); }
 
 private:
     char* m_buffer; // TODO: use buffer pool
@@ -118,24 +118,24 @@ private:
 };
 
 #define DEFINE_SERIALIZER(...) \
-    void Write(Packet& p) \
+    virtual void Write(Packet& p) \
     { \
         p.push(__VA_ARGS__); \
     } \
-    void Read(Packet& p) \
+    virtual void Read(Packet& p) \
     { \
         p.pop(__VA_ARGS__); \
     } \
 
 
 #define DEFINE_SERIALIZER_WITH_PARENT(parent, ...) \
-void Write(Packet& p) \
-{ \
-    parent::Write(p); \
-    p.push(__VA_ARGS__); \
-} \
-void Read(Packet& p) \
-{ \
-    parent::Write(p); \
-    p.pop(__VA_ARGS__); \
-} \
+    virtual void Write(Packet& p) \
+    { \
+        parent::Write(p); \
+        p.push(__VA_ARGS__); \
+    } \
+    virtual void Read(Packet& p) \
+    { \
+        parent::Write(p); \
+        p.pop(__VA_ARGS__); \
+    } \

@@ -62,7 +62,7 @@ bool Session::do_send(std::shared_ptr<Packet> packet)
     return true;
 }
 
-bool Session::do_send(iProtocol protocol)
+bool Session::do_send(iProtocol& protocol)
 {
     std::shared_ptr<Packet> p = std::make_shared<Packet>();
     p->initialize();

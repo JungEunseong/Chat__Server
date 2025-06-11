@@ -36,12 +36,12 @@ void ChatClientSession::execute_packet(Packet* packet)
 
 void ChatClientSession::login_hadler(Packet* packet)
 {
-    C2S_REQ_LOGIN login_packet;
-    login_packet.Read(*packet);
+   C2S_REQ_LOGIN recv_packet_from_client;
+    recv_packet_from_client.Read(*packet);
     
     NetworkSection* section = get_section();
 
     S2C_RES_LOGIN send_packet_from_client;
-    send_packet_from_client.nickname = login_packet.nickname;
+    send_packet_from_client.nickname = recv_packet_from_client.nickname;
     section->broadcast(send_packet_from_client);
 }
