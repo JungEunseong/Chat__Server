@@ -57,9 +57,10 @@ public:
 
     void push(std::wstring& data)
     {
-        size_t data_size = data.size();
         //TODO: stop(current_idx + size >= PACKET_MAX_SIZE)
-        
+        size_t data_size = data.size() * sizeof(wchar_t);
+        push(data_size);
+
         ::memcpy_s(get_current_idx_ptr(), data_size, data.c_str(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
@@ -91,10 +92,12 @@ public:
 
     void pop(std::wstring& data)
     {
-        const size_t data_size = data.size();
         //TODO: stop(current_idx + size >= PACKET_MAX_SIZE)
+        size_t data_size = 0;
+        pop(data_size);
+        data.resize(data_size / sizeof(wchar_t));
         
-        ::memcpy_s(const_cast<wchar_t*>(data.c_str()), data_size, get_current_idx_ptr(), data_size);
+        ::memcpy_s(const_cast<wchar_t*>(data.data()), data_size, get_current_idx_ptr(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
     
