@@ -57,6 +57,15 @@ void NetworkSection::broadcast(std::shared_ptr<Packet> packet)
         session.second->do_send(packet);
 }
 
+void NetworkSection::broadcast(std::shared_ptr<Packet> packet, Session* exception_session)
+{
+    for (auto& session : m_sessions)
+    {
+        if (session.second->get_id() == exception_session->get_id()) continue;
+        session.second->do_send(packet);
+    }
+}
+
 void NetworkSection::broadcast(class iProtocol& protocol)
 {
     std::shared_ptr<Packet> packet = std::make_shared<Packet>();
@@ -65,6 +74,16 @@ void NetworkSection::broadcast(class iProtocol& protocol)
     packet->finalize();
 
     broadcast(packet);
+}
+
+void NetworkSection::broadcast(class iProtocol& protocol, Session* exception_session)
+{
+    std::shared_ptr<Packet> packet = std::make_shared<Packet>();
+    packet->initialize();
+    protocol.Write(*packet.get());
+    packet->finalize();
+
+    broadcast(packet, exception_session);
 }
 
 void NetworkSection::section_thread_work()

@@ -32,7 +32,9 @@ public:
     void push_task(iTask* task);
 
     void broadcast(std::shared_ptr<Packet> packet);
+    void broadcast(std::shared_ptr<Packet> packet, Session* exception_session);
     void broadcast(class iProtocol& protocol);
+    void broadcast(class iProtocol& protocol, Session* exception_session);
     
 private:
     void section_thread_work();

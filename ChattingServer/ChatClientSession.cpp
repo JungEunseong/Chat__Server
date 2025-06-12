@@ -37,6 +37,10 @@ void ChatClientSession::login_hadler(Packet* packet)
     NetworkSection* section = get_section();
 
     S2C_RES_LOGIN send_packet_from_client;
+    send_packet_from_client.is_mine = false;
     send_packet_from_client.nickname = recv_packet_from_client.nickname;
-    section->broadcast(send_packet_from_client);
+    section->broadcast(send_packet_from_client, this);
+
+    send_packet_from_client.is_mine = true;
+    do_send(send_packet_from_client);
 }

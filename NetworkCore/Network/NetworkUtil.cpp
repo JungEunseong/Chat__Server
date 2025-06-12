@@ -171,7 +171,7 @@ bool NetworkUtil::receive(SOCKET socket, RecvIO* io)
     DWORD recv_bytes = 0;
     DWORD flag = 0;
 
-    if(false == WSARecv(socket, &buf, 1, &recv_bytes, &flag, io, nullptr))
+    if(0 != WSARecv(socket, &buf, 1, &recv_bytes, &flag, io, nullptr))
     {
         int err_code = ::GetLastError();
 

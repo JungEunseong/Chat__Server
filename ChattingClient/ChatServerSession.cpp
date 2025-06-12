@@ -46,7 +46,7 @@ void ChatServerSession::logic_thread_work()
 {
     while (true == m_is_connected)
     {
-        std::cout << "chat input: " << std::endl;
+        std::cout << "chat input: ";
         std::string input;
         std::cin >> input;
 
@@ -68,5 +68,6 @@ void ChatServerSession::login_hadler(Packet* packet)
 
     std::wcout <<  recv_packet_from_server.nickname << L" has entered" << std::endl;
 
-    m_logic_thread = std::thread([this](){ logic_thread_work(); });
+    if (recv_packet_from_server.is_mine)
+        m_logic_thread = std::thread([this](){ logic_thread_work(); });
 }

@@ -31,9 +31,9 @@ public:
 	~S2C_RES_LOGIN() = default;
 	
 public:
+	bool is_mine;
 	std::wstring nickname;
-
-	DEFINE_SERIALIZER_WITH_PARENT(iProtocol, nickname)
+	DEFINE_SERIALIZER_WITH_PARENT(iProtocol, is_mine, nickname)
 };
 
 class C2S_CHAT_MESSAGE : public iProtocol
