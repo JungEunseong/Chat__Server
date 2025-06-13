@@ -6,6 +6,7 @@ void ChatServerSession::init()
     ServerSession::init();
     
     m_handlers.emplace(packet_number::LOGIN, [this](auto* p){this->login_hadler(p); });
+    m_handlers.emplace(packet_number::CHAT_MESSAGE, [this](auto* p){this->chat_message_hadler(p); });
 }
 
 NetworkCore* ChatServerSession::get_network_core()
@@ -47,8 +48,8 @@ void ChatServerSession::logic_thread_work()
     while (true == m_is_connected)
     {
         std::cout << "chat input: ";
-        std::string input;
-        std::cin >> input;
+        std::wstring input;
+        std::wcin >> input;
 
         if (input[0] == '@')
         {
@@ -56,7 +57,10 @@ void ChatServerSession::logic_thread_work()
         }
         else
         {
-            // TODO: Chatting
+            C2S_REQ_CHAT_MESSAGE send_packet_to_server;
+            send_packet_to_server.message = input;
+
+            do_send(send_packet_to_server);
         }
     }
 }
@@ -70,4 +74,12 @@ void ChatServerSession::login_hadler(Packet* packet)
 
     if (recv_packet_from_server.is_mine)
         m_logic_thread = std::thread([this](){ logic_thread_work(); });
+}
+
+void ChatServerSession::chat_message_hadler(Packet* packet)
+{
+    S2C_NTF_CHAT_MESSAGE recv_packet_from_server;
+    recv_packet_from_server.Read(*packet);
+
+    std:: wcout << L"[" <<  recv_packet_from_server.nickname << L"]: " << recv_packet_from_server.message << std::endl;
 }

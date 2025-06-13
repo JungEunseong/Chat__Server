@@ -111,7 +111,7 @@ void ServerBase::on_iocp_io(NetworkIO* io, int bytes_transferred)
 {
     Session* session = io->get_session();
 
-    std::wcout << "io in, type: " << io->get_type() << " io size: " << bytes_transferred << std::endl;
+    // std::wcout << "io in, type: " << io->get_type() << " io size: " << bytes_transferred << std::endl;
     
     switch(io->get_type())
     {

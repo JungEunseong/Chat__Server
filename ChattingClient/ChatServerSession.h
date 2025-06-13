@@ -15,6 +15,7 @@ private:
 
 private:
     void login_hadler(Packet* packet);
+    void chat_message_hadler(Packet* packet);
 
 private:
     std::thread m_logic_thread;

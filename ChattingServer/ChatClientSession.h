@@ -18,6 +18,7 @@ public:
     
 public:
     void login_hadler(Packet* packet);
+    void chat_message_hadler(Packet* packet);
 
 private:
 
