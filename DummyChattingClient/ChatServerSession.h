@@ -1,29 +1,20 @@
 ﻿#pragma once
 
-namespace chat_client
+namespace dummy_client
 {
-    class ChatServerSession : public ServerSession 
+    class ChatServerSession : public ServerSession
     {
     public:
         ChatServerSession() = default;
         ~ChatServerSession() override = default;
+    
     public:
         void init() override;
+
     public:
         NetworkCore* get_network_core() override;
         void on_connected() override;
         void on_send(int data_size) override;
         void on_disconnected() override;
-
-    private:
-        void logic_thread_work();
-
-    private:
-        void login_hadler(Packet* packet);
-        void chat_message_hadler(Packet* packet);
-
-    private:
-        std::thread m_logic_thread;
-
     };
 }

@@ -130,6 +130,7 @@ void Session::complete_send(int bytes_transferred)
 void Session::complete_disconnect()
 {
     m_is_connected = false;
+    closesocket(m_connecting_socket);
     on_disconnected();
 }
 

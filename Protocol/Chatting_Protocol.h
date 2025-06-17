@@ -61,3 +61,15 @@ public:
 	
 	 DEFINE_SERIALIZER_WITH_PARENT(iProtocol, nickname, message)
 };
+
+class C2S_REQ_CREATE_ROOM : public iProtocol
+{
+public:
+	C2S_REQ_CREATE_ROOM() : iProtocol(packet_number::CREATE_ROOM) { }
+	~C2S_REQ_CREATE_ROOM() = default;
+
+public:
+	std::wstring room_name;
+
+	DEFINE_SERIALIZER_WITH_PARENT(iProtocol, room_name)
+};

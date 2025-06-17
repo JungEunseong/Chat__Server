@@ -2,7 +2,7 @@
 #include "ChatClientSession.h"
 
 
-void ChatClientSession::init()
+void chat_server::ChatClientSession::init()
 {
     ClientSession::init();
     
@@ -11,27 +11,27 @@ void ChatClientSession::init()
     
 }
 
-NetworkCore* ChatClientSession::get_network_core()
+NetworkCore* chat_server::ChatClientSession::get_network_core()
 {
     return ClientSession::get_network_core();
 }
 
-void ChatClientSession::on_connected()
+void chat_server::ChatClientSession::on_connected()
 {
     ClientSession::on_connected();
 }
 
-void ChatClientSession::on_send(int data_size)
+void chat_server::ChatClientSession::on_send(int data_size)
 {
     ClientSession::on_send(data_size);
 }
 
-void ChatClientSession::on_disconnected()
+void chat_server::ChatClientSession::on_disconnected()
 {
     ClientSession::on_disconnected();
 }
 
-void ChatClientSession::login_hadler(Packet* packet)
+void chat_server::ChatClientSession::login_hadler(Packet* packet)
 {
    C2S_REQ_LOGIN recv_packet_from_client;
     recv_packet_from_client.Read(*packet);
@@ -51,7 +51,7 @@ void ChatClientSession::login_hadler(Packet* packet)
     do_send(send_packet_from_client);
 }
 
-void ChatClientSession::chat_message_hadler(Packet* packet)
+void chat_server::ChatClientSession::chat_message_hadler(Packet* packet)
 {
     C2S_REQ_CHAT_MESSAGE recv_packet_from_client;
     recv_packet_from_client.Read(*packet);

@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "ChatServerSession.h"
 
-void ChatServerSession::init()
+void chat_client::ChatServerSession::init()
 {
     ServerSession::init();
     
@@ -9,12 +9,12 @@ void ChatServerSession::init()
     m_handlers.emplace(packet_number::CHAT_MESSAGE, [this](auto* p){this->chat_message_hadler(p); });
 }
 
-NetworkCore* ChatServerSession::get_network_core()
+NetworkCore* chat_client::ChatServerSession::get_network_core()
 {
     return ServerSession::get_network_core();
 }
 
-void ChatServerSession::on_connected()
+void chat_client::ChatServerSession::on_connected()
 {
     ServerSession::on_connected();
     std::wcout << L"connect success" << std::endl;
@@ -33,17 +33,17 @@ void ChatServerSession::on_connected()
     }
 }
 
-void ChatServerSession::on_send(int data_size)
+void chat_client::ChatServerSession::on_send(int data_size)
 {
     ServerSession::on_send(data_size);
 }
 
-void ChatServerSession::on_disconnected()
+void chat_client::ChatServerSession::on_disconnected()
 {
     ServerSession::on_disconnected();
 }
 
-void ChatServerSession::logic_thread_work()
+void chat_client::ChatServerSession::logic_thread_work()
 {
     while (true == m_is_connected)
     {
@@ -65,7 +65,7 @@ void ChatServerSession::logic_thread_work()
     }
 }
 
-void ChatServerSession::login_hadler(Packet* packet)
+void chat_client::ChatServerSession::login_hadler(Packet* packet)
 {
     S2C_RES_LOGIN recv_packet_from_server;
     recv_packet_from_server.Read(*packet);
@@ -76,7 +76,7 @@ void ChatServerSession::login_hadler(Packet* packet)
         m_logic_thread = std::thread([this](){ logic_thread_work(); });
 }
 
-void ChatServerSession::chat_message_hadler(Packet* packet)
+void chat_client::ChatServerSession::chat_message_hadler(Packet* packet)
 {
     S2C_NTF_CHAT_MESSAGE recv_packet_from_server;
     recv_packet_from_server.Read(*packet);
