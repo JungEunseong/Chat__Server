@@ -36,9 +36,10 @@ void chat_server::ChatClientSession::login_hadler(Packet* packet)
    C2S_REQ_LOGIN recv_packet_from_client;
     recv_packet_from_client.Read(*packet);
 
-    std::wcout << L"[LOG] " << m_nickname << L"log in" << std::endl;
-    
     m_nickname = recv_packet_from_client.nickname;
+    
+    std::wcout << L"[LOG] " << m_nickname << L" log in" << std::endl;
+    
     
     S2C_RES_LOGIN send_packet_from_client;
     send_packet_from_client.nickname = recv_packet_from_client.nickname;
