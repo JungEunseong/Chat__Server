@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="config.cpp" />
     <ClCompile Include="CoreIncludes.cpp" />
     <ClCompile Include="Network\ClientBase.cpp" />
     <ClCompile Include="Network\ClientSession.cpp" />
@@ -42,6 +43,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="CoreIncludes.h" />
     <ClInclude Include="Network\Base.h" />
     <ClInclude Include="Network\ClientBase.h" />

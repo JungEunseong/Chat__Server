@@ -76,6 +76,8 @@ void ClientBase::job_thread_work()
 
         if(false == m_packet_queue.try_pop(packet))
             continue;
+
+        
         
         Session* session = packet->get_owner();
         

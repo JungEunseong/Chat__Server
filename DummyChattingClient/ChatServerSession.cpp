@@ -34,7 +34,6 @@ void dummy_client::ChatServerSession::on_connected()
         do_disconnect();
         return;
     }
-    
 }
 
 void dummy_client::ChatServerSession::on_send(int data_size)
@@ -63,7 +62,7 @@ void dummy_client::ChatServerSession::chat_message_hadler(Packet* packet)
     S2C_NTF_CHAT_MESSAGE recv_packet_from_server;
     recv_packet_from_server.Read(*packet);
 
-    std:: wcout << L"[" <<  recv_packet_from_server.nickname << L"]: " << recv_packet_from_server.message << std::endl;
+    //std:: wcout << L"[" <<  recv_packet_from_server.nickname << L"]: " << recv_packet_from_server.message << std::endl;
 }
 
 void dummy_client::ChatServerSession::logic_thread_work()
@@ -82,5 +81,22 @@ void dummy_client::ChatServerSession::logic_thread_work()
         do_send(send_packet_to_server);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(33));
+    }
+}
+
+void dummy_client::ChatServerSession::execute_packet(Packet* packet)
+{
+    ServerSession::execute_packet(packet);
+    if (true == performance_check_mode)
+    {
+        int tick_idx = packet->get_size() - sizeof(long long);
+        long long start_tick = static_cast<long long>(*(packet->get_buffer() + tick_idx));
+        long long current_tick = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+
+        DummyChattingClientService* service =  static_cast<DummyChattingClientService*>(get_network_core());
+        if (nullptr != service)
+        {
+            service->push_rtt_data(packet->get_protocol(), current_tick - start_tick);
+        }
     }
 }

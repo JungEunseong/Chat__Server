@@ -15,7 +15,10 @@
 #include <thread>
 #include <functional>
 #include <chrono>
+#include <mutex>
+#include <numeric>
 
+#include "config.h"
 #include "Network/Base.h"
 #include "Network/NetworkUtil.h"
 #include "Network/Packet.h"

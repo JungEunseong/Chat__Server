@@ -39,7 +39,7 @@ void NetworkCore::iocp_thread_work()
             const int err_no = ::WSAGetLastError();
             std::wcout << "GQCS error: " << err_no << std::endl; 
             // TODO: error log
-            return;
+            continue;
         }
 
         on_iocp_io(io, bytes_transferred);

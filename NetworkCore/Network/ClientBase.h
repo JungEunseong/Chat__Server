@@ -11,7 +11,7 @@ public:
 public:
     void open(std::string connecting_ip, int connecting_port, std::function<class ServerSession*()> session_factory, int
               session_count = 1);
-
+    
 protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;
 
@@ -25,4 +25,5 @@ private:
     std::function<class ServerSession*()> m_session_factory;
 
     std::map<unsigned int, class ServerSession*> m_sessions;
+    
 };

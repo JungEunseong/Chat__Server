@@ -24,6 +24,9 @@ namespace dummy_client
     private:
         void logic_thread_work();
 
+    public:
+        void execute_packet(Packet* packet) override;
+
     private:
 
         std::thread m_logic_thread;
