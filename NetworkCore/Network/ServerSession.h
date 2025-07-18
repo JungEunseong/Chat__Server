@@ -14,6 +14,7 @@ public:
     int on_recieve() final;
     void on_send(int data_size) override;
     void on_disconnected() override;
+    bool do_send(iProtocol& protocol) override;
 
 private:
     class ClientBase* m_owner;

@@ -67,11 +67,6 @@ bool Session::do_send(iProtocol& protocol)
     std::shared_ptr<Packet> p = std::make_shared<Packet>();
     p->initialize();
     protocol.Write(*(p.get()));
-    if (true == performance_check_mode)
-    {
-        long long tick = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-        p->push(tick);
-    }
     p->finalize();
 
     return do_send(p);

@@ -41,7 +41,7 @@ public:
     bool do_connect();
     bool do_recieve();
     bool do_send(std::shared_ptr<Packet> packet);
-    bool do_send(iProtocol& protocol);
+    virtual bool do_send(iProtocol& protocol);
     bool do_disconnect();
 
     void complete_connect();

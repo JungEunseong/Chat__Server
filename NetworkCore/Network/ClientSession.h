@@ -18,6 +18,7 @@ public:
     int on_recieve() final;
     void on_send(int data_size) override;
     void on_disconnected() override;
+    void execute_packet(Packet* packet) override;
 
 protected:
     class NetworkSection* m_section;

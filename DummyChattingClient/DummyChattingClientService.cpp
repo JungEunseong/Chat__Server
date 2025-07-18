@@ -36,7 +36,7 @@ void DummyChattingClientService::performance_monitor_thread_work()
                 continue;
             auto range = m_rtt_data.equal_range(i);
 
-            int sum = std::accumulate(
+            long long sum = std::accumulate(
                    range.first, range.second, 0,
                    [](int acc, const std::pair<int, int>& p) {
                        return acc + p.second;
@@ -44,6 +44,9 @@ void DummyChattingClientService::performance_monitor_thread_work()
 
             std::wcout << L"pakcet number [" << i <<L"] rtt avg:" << sum / m_rtt_data.count(i) << std::endl;
         }
+
+        m_rtt_data.clear();
+        
         m_rtt_lock.unlock();
         
     }

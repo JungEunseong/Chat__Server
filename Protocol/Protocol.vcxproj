@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="iSerializeObject.h" />
+    <ClInclude Include="Net_Protocol.h" />
     <ClInclude Include="PacketNumber.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ProtocolIncludes.h" />

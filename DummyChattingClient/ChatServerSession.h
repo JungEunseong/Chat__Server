@@ -20,6 +20,7 @@ namespace dummy_client
     public:
         void login_hadler(Packet* packet);
         void chat_message_hadler(Packet* packet);
+        void rtt_packet_hadler(Packet* packet);
 
     private:
         void logic_thread_work();

@@ -100,13 +100,14 @@ void NetworkSection::section_thread_work()
             m_task_queue.push(task);
             continue;
         }
-        
+
         task->func();
 
         if(task->is_repeat)
         {
             task->execute_time = std::chrono::steady_clock::now() + std::chrono::microseconds(task->delay_time);
             m_task_queue.push(task);
-        } 
+        }
+            
     }
 }

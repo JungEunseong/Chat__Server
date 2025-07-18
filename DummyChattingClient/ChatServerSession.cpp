@@ -11,8 +11,10 @@ void dummy_client::ChatServerSession::init()
 
     m_nickname = std::to_wstring(++dummy_client_nickname);
 
+    m_handlers.emplace(packet_number::RTT_PACKET, [this](auto* p){this->rtt_packet_hadler(p); });
     m_handlers.emplace(packet_number::LOGIN, [this](auto* p){this->login_hadler(p); });
     m_handlers.emplace(packet_number::CHAT_MESSAGE, [this](auto* p){this->chat_message_hadler(p); });
+    
 }
 
 NetworkCore* dummy_client::ChatServerSession::get_network_core()
@@ -65,6 +67,21 @@ void dummy_client::ChatServerSession::chat_message_hadler(Packet* packet)
     //std:: wcout << L"[" <<  recv_packet_from_server.nickname << L"]: " << recv_packet_from_server.message << std::endl;
 }
 
+void dummy_client::ChatServerSession::rtt_packet_hadler(Packet* packet)
+{
+    S2C_RES_RTT_PACKET recv_packet_from_server;
+    recv_packet_from_server.Read(*packet);
+
+    long long current_tick = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+
+    DummyChattingClientService* service =  static_cast<DummyChattingClientService*>(get_network_core());
+    if (nullptr != service)
+    {
+        long long rtt_tick = current_tick - recv_packet_from_server.start_tick;
+        service->push_rtt_data(recv_packet_from_server.rtt_protocol_number, current_tick - recv_packet_from_server.start_tick);
+    }
+}
+
 void dummy_client::ChatServerSession::logic_thread_work()
 {
     std::srand(static_cast<unsigned int>(time(0)));
@@ -87,16 +104,5 @@ void dummy_client::ChatServerSession::logic_thread_work()
 void dummy_client::ChatServerSession::execute_packet(Packet* packet)
 {
     ServerSession::execute_packet(packet);
-    if (true == performance_check_mode)
-    {
-        int tick_idx = packet->get_size() - sizeof(long long);
-        long long start_tick = static_cast<long long>(*(packet->get_buffer() + tick_idx));
-        long long current_tick = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-
-        DummyChattingClientService* service =  static_cast<DummyChattingClientService*>(get_network_core());
-        if (nullptr != service)
-        {
-            service->push_rtt_data(packet->get_protocol(), current_tick - start_tick);
-        }
-    }
+   
 }
