@@ -101,8 +101,9 @@ void ServerBase::central_thread_work()
         ClientSession* session = static_cast<ClientSession*>(packet->get_owner());
        
         iTask* task = xnew iTask;
-        task->func = [&]() { session->execute_packet(packet); };
 
+        task->func = [session, packet]() { session->execute_packet(packet); };
+        
         session->get_section()->push_task(task);
     }
 }

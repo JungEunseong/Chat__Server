@@ -108,6 +108,8 @@ void NetworkSection::section_thread_work()
             task->execute_time = std::chrono::steady_clock::now() + std::chrono::microseconds(task->delay_time);
             m_task_queue.push(task);
         }
+        else
+            xdelete task;
             
     }
 }

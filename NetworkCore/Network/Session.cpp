@@ -147,7 +147,8 @@ int Session::on_recieve()
         
         if(header.packet_size > remain_len) break;
 
-        Packet* packet = xnew Packet; 
+        Packet* packet = xnew Packet;
+        
         packet->set_packet(m_recv_buffer.GetReadPos() + complete_byte_length, header.packet_size);
         packet->set_owner(this);
 
@@ -157,6 +158,8 @@ int Session::on_recieve()
         {
             //TODO: LOG
             do_disconnect();
+            xdelete packet;
+            
             return 0;
         }
     
