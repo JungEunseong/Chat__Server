@@ -69,6 +69,7 @@ void NetworkSection::broadcast(std::shared_ptr<Packet> packet, Session* exceptio
 void NetworkSection::broadcast(class iProtocol& protocol)
 {
     std::shared_ptr<Packet> packet = std::make_shared<Packet>();
+    packet->reserve_packet_buffer(sizeof(protocol) + sizeof(PACKET_HEADER_SIZEOF));
     packet->initialize();
     protocol.Write(*packet.get());
     packet->finalize();
@@ -79,6 +80,7 @@ void NetworkSection::broadcast(class iProtocol& protocol)
 void NetworkSection::broadcast(class iProtocol& protocol, Session* exception_session)
 {
     std::shared_ptr<Packet> packet = std::make_shared<Packet>();
+    packet->reserve_packet_buffer(sizeof(protocol) + sizeof(PACKET_HEADER_SIZEOF));
     packet->initialize();
     protocol.Write(*packet.get());
     packet->finalize();

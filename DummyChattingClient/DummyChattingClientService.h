@@ -20,6 +20,7 @@ private:
 private:
 
     std::thread m_performance_monitor_thread;
+    std::vector<std::thread> m_job_threads;
 
     std::mutex m_rtt_lock;
     std::multimap<int, int> m_rtt_data;

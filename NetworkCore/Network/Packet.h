@@ -8,7 +8,6 @@ struct PacketHeader
 
 enum
 {
-    PACKET_MAX_SIZE = 65535,
     PACKET_SIZE_SIZEOF = sizeof(unsigned short),
     PACKET_PROTOCOL_SIZEOF = sizeof(unsigned short),
     PACKET_HEADER_SIZEOF = sizeof(struct PacketHeader),
@@ -22,16 +21,17 @@ public:
     Packet(Packet* packet);
     ~Packet();
 
+    void reserve_packet_buffer(int size);
     void set_packet(char* data, int size);
     void set_owner(class Session* session);
     Session* get_owner(); 
 public:
 
-    void initialize() { m_current_idx = 0; }
+    void initialize() { m_current_idx = 0; m_buffer.resize(PACKET_HEADER_SIZEOF); }
     void finalize() { *(static_cast<unsigned short*>(get_size_ptr())) = static_cast<unsigned short>(m_current_idx) + PACKET_SIZE_SIZEOF; }
-    unsigned short get_size() const { return *m_buffer; }
-    unsigned short get_protocol() const { return *(m_buffer + PACKET_SIZE_SIZEOF); }
-    char* get_buffer() {return m_buffer; }
+    unsigned short get_size() const { return *m_buffer.data(); }
+    unsigned short get_protocol() const { return *(m_buffer.data() + PACKET_SIZE_SIZEOF); }
+    std::vector<char>& get_buffer() {return m_buffer; }
 
 public:
     
@@ -41,7 +41,8 @@ public:
     {
         size_t data_size = sizeof(t);
         //TODO: stop(current_idx + data_size >= PACKET_MAX_SIZE)
-        
+
+        m_buffer.resize(m_buffer.size() + data_size);
         ::memcpy_s(get_current_idx_ptr(), data_size, &data, data_size);
         m_current_idx += static_cast<int>(data_size);
     }
@@ -50,6 +51,7 @@ public:
     {
         //TODO: stop(current_idx + size >= PACKET_MAX_SIZE)
         
+        m_buffer.resize(m_buffer.size() + size);
         ::memcpy_s(get_current_idx_ptr(), size, data, size);
         m_current_idx += size;
     }
@@ -61,6 +63,7 @@ public:
         size_t data_size = data.size() * sizeof(wchar_t);
         push(data_size);
 
+        m_buffer.resize(m_buffer.size() + data_size);
         ::memcpy_s(get_current_idx_ptr(), data_size, data.c_str(), data_size);
         m_current_idx += static_cast<int>(data_size);
     }
@@ -108,12 +111,12 @@ public:
     }
     
 private:
-    void* get_protocol_ptr() { return m_buffer + PACKET_SIZE_SIZEOF; }
-    void* get_size_ptr() { return m_buffer; }
-    void* get_current_idx_ptr() {return (m_buffer + PACKET_SIZE_SIZEOF + m_current_idx); }
+    void* get_protocol_ptr() { return m_buffer.data() + PACKET_SIZE_SIZEOF; }
+    void* get_size_ptr() { return m_buffer.data(); }
+    void* get_current_idx_ptr() {return (m_buffer.data() + PACKET_SIZE_SIZEOF + m_current_idx); }
 
 private:
-    char* m_buffer; // TODO: use buffer pool
+    std::vector<char> m_buffer; // TODO: use buffer pool
     int m_current_idx;
 
     // For Read 

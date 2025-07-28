@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 class ClientBase : public NetworkCore
 {
@@ -15,7 +15,7 @@ public:
 protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;
 
-private:
+protected:
     void job_thread_work();
 
 private:

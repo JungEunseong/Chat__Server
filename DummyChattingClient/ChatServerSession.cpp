@@ -53,7 +53,7 @@ void dummy_client::ChatServerSession::login_hadler(Packet* packet)
     S2C_RES_LOGIN recv_packet_from_server;
     recv_packet_from_server.Read(*packet);
 
-    std::wcout <<  recv_packet_from_server.nickname << L" has entered" << std::endl;
+    //std::wcout <<  recv_packet_from_server.nickname << L" has entered" << std::endl;
 
     if (recv_packet_from_server.is_mine)
         m_logic_thread = std::thread([this](){ logic_thread_work(); });
@@ -97,7 +97,7 @@ void dummy_client::ChatServerSession::logic_thread_work()
 
         do_send(send_packet_to_server);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(33));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 

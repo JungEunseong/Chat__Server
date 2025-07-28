@@ -75,7 +75,10 @@ void ClientBase::job_thread_work()
         Packet* packet;
 
         if(false == m_packet_queue.try_pop(packet))
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
             continue;
+        }
         
         Session* session = packet->get_owner();
         

@@ -5,7 +5,7 @@
 int main(int argc, char* argv[])
 {
     DummyChattingClientService service;
-    service.init(1);
+    service.init(5);
 
     std::wcout << L"seccion count: ";
 

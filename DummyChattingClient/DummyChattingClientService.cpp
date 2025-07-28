@@ -7,6 +7,9 @@ void DummyChattingClientService::init(int iocp_thread_count)
     ClientBase::init(iocp_thread_count);
 
     m_performance_monitor_thread = std::thread(&DummyChattingClientService::performance_monitor_thread_work, this);
+
+    for (int i = 0; i < 8; ++i)
+        m_job_threads.emplace_back(std::thread(&DummyChattingClientService::job_thread_work, this));
 }
 
 void DummyChattingClientService::on_iocp_io(NetworkIO* io, int bytes_transferred)

@@ -65,6 +65,7 @@ bool Session::do_send(std::shared_ptr<Packet> packet)
 bool Session::do_send(iProtocol& protocol)
 {
     std::shared_ptr<Packet> p = std::make_shared<Packet>();
+    p->reserve_packet_buffer(sizeof(protocol) + sizeof(PACKET_HEADER_SIZEOF));
     p->initialize();
     protocol.Write(*(p.get()));
     p->finalize();

@@ -21,6 +21,7 @@ void ServerSession::on_disconnected()
 bool ServerSession::do_send(iProtocol& protocol)
 {
     std::shared_ptr<Packet> p = std::make_shared<Packet>();
+    p->reserve_packet_buffer(sizeof(protocol) + sizeof(PACKET_HEADER_SIZEOF));
     p->initialize();
     protocol.Write(*(p.get()));
     if (true == performance_check_mode)
