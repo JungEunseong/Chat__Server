@@ -36,6 +36,18 @@ bool MultiSender::on_send()
     return true;
 }
 
+void MultiSender::clear()
+{
+    while (false == m_register_packet.empty())
+    {
+        std::shared_ptr<Packet> p;
+        m_register_packet.try_pop(p);
+    }
+
+    while (false == m_register_packet.empty())
+        m_sending_packet.pop();
+}
+
 bool MultiSender::send()
 {
     m_send_io.Clear();

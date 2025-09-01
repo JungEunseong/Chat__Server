@@ -10,12 +10,16 @@ public:
         m_recv_io.set_session(this);
         m_disconnect_io.set_session(this);
     }
-    virtual ~Session() = default;
+    virtual ~Session()
+    {
+        finalize();
+    };
 
 public:
     static int generate_session_id();
 public:
     virtual void init();
+    virtual void finalize();
 public:
     int get_id() { return m_session_id; };
     void set_id(int id) { m_session_id = id; };

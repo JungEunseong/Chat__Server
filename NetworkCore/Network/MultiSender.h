@@ -12,6 +12,7 @@ public:
 public:
     bool register_packet(std::shared_ptr<Packet> packet);
     bool on_send();
+    void clear();
 private:
     bool send();
 

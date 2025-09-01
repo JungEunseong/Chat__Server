@@ -12,6 +12,16 @@ void Session::init()
 {
 }
 
+void Session::finalize()
+{
+    m_recv_buffer.Clean();
+    m_connecting_socket = INVALID_SOCKET;
+    m_remote_ip = "";
+    m_remote_port = 0;
+    m_multi_sender.clear();
+
+}
+
 bool Session::do_connect()
 {
     NetworkCore* network_core = get_network_core();
