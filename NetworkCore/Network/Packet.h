@@ -142,6 +142,6 @@ private:
     } \
     virtual void Read(Packet& p) \
     { \
-        parent::Write(p); \
+        parent::Read(p); \
         p.pop(__VA_ARGS__); \
     } \
