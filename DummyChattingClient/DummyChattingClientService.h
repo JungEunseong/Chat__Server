@@ -23,5 +23,5 @@ private:
     std::vector<std::thread> m_job_threads;
 
     std::mutex m_rtt_lock;
-    std::multimap<int, int> m_rtt_data;
+    std::multimap<unsigned short, long long> m_rtt_data;
 };
