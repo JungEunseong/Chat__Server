@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="config.cpp" />
     <ClCompile Include="CoreIncludes.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Network\ClientBase.cpp" />
     <ClCompile Include="Network\ClientSession.cpp" />
     <ClCompile Include="Network\iChannel.cpp" />
@@ -45,6 +46,7 @@
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="CoreIncludes.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="Network\Base.h" />
     <ClInclude Include="Network\ClientBase.h" />
     <ClInclude Include="Network\ClientSession.h" />
