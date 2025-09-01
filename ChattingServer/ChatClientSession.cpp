@@ -58,7 +58,7 @@ void chat_server::ChatClientSession::chat_message_hadler(Packet* packet)
     recv_packet_from_client.Read(*packet);
 
     // TODO: USE LOGGER
-    std::wcout << L"[LOG] " << m_nickname << L" chatted => message: " << recv_packet_from_client.message << std::endl;
+    //std::wcout << L"[LOG] " << m_nickname << L" chatted => message: " << recv_packet_from_client.message << std::endl;
     
 
     if (true == m_nickname.empty())
