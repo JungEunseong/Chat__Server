@@ -21,7 +21,7 @@ void DummyChattingClientService::performance_monitor_thread_work()
 {
     while (true == is_running())
     {
-        std::this_thread::sleep_for(std::chrono::seconds(10));
+        std::this_thread::sleep_for(std::chrono::seconds(client_rtt_check_interval));
         
         m_rtt_lock.lock();
 

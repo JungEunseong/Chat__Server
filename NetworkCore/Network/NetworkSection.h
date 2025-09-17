@@ -39,6 +39,10 @@ public:
 private:
     void section_thread_work();
 
+public:
+    double get_fps() const { return m_current_fps; }
+    void update_fps_info();
+    
 private:
     unsigned int m_section_id;
 
@@ -47,4 +51,9 @@ private:
     std::map<unsigned int, class ClientSession*> m_sessions;
     
     Concurrency::concurrent_priority_queue<iTask*, task_cmp> m_task_queue;
+    
+    // FPS 측정 관련
+    std::chrono::high_resolution_clock::time_point m_last_frame_time;
+    int m_frame_count;
+    double m_current_fps;
 };

@@ -4,6 +4,13 @@
 void NetworkSection::init(ServerBase* owner, int section_id)
 {
     m_owner = owner;
+    m_section_id = section_id;
+    
+    // FPS 측정 초기화
+    m_last_frame_time = std::chrono::high_resolution_clock::now();
+    m_frame_count = 0;
+    m_current_fps = 0;
+    
     m_section_thread= std::thread([this](){ section_thread_work(); });
 }
 
@@ -92,7 +99,11 @@ void NetworkSection::section_thread_work()
 {
     while(m_owner->is_running() == true)
     {
-        if(m_task_queue.empty()) continue;
+        if(m_task_queue.empty()) 
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            continue;
+        }
         
         iTask* task = nullptr;
         if(false == m_task_queue.try_pop(task)) continue;
@@ -105,6 +116,10 @@ void NetworkSection::section_thread_work()
 
         task->func();
 
+        // 실제 작업을 처리했을 때만 FPS 카운트
+        if (performance_check_mode)
+            update_fps_info();
+
         if(task->is_repeat)
         {
             task->execute_time = std::chrono::steady_clock::now() + std::chrono::microseconds(task->delay_time);
@@ -113,5 +128,20 @@ void NetworkSection::section_thread_work()
         else
             xdelete task;
             
+    }
+}
+
+void NetworkSection::update_fps_info()
+{
+    m_frame_count++;
+    
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto delta_time = std::chrono::duration<double>(current_time - m_last_frame_time).count();
+        
+    if (delta_time >= 1.0) // 1초마다 FPS 업데이트
+    {
+        m_current_fps = m_frame_count / delta_time;
+        m_frame_count = 0;
+        m_last_frame_time = current_time;
     }
 }

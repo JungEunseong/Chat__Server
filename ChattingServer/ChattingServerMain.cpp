@@ -10,9 +10,8 @@ int main(int argc, char* argv[])
         return xnew chat_server::ChatClientSession;
     }, 1);
 
-
     while (true)
     {
-        
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }

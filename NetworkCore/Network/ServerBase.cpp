@@ -8,6 +8,9 @@ void ServerBase::init(int iocp_thread_count, int section_count)
 {
     NetworkCore::init(iocp_thread_count);
 
+    if (performance_check_mode)
+        m_performance_monitor_thread = std::thread(&ServerBase::fps_monitor_thread_work, this);
+    
     m_central_thread = std::thread(&ServerBase::central_thread_work, this); 
     
     m_listen_socket = NetworkUtil::create_socket();
@@ -105,6 +108,49 @@ void ServerBase::central_thread_work()
         task->func = [session, packet]() { session->execute_packet(packet); };
         
         session->get_section()->push_task(task);
+    }
+}
+
+double ServerBase::get_fps_avg()
+{
+    if (m_sections.empty()) 
+        return 0;
+    
+    double total_fps = 0;
+    int active_sections = 0;
+    
+    for (auto& section_pair : m_sections)
+    {
+        double section_fps = section_pair.second->get_fps();
+        if (section_fps > 0)
+        {
+            total_fps += section_fps;
+            active_sections++;
+        }
+    }
+    
+    return (active_sections > 0) ? total_fps / active_sections : 0;
+}
+
+void ServerBase::print_fps_info()
+{
+    std::cout << "=== Server FPS Info ===" << std::endl;
+    std::cout << "Average FPS: " << static_cast<int>(get_fps_avg()) << std::endl;
+    
+    for (auto& section_pair : m_sections)
+    {
+        std::cout << "Section " << section_pair.first << " FPS: " << static_cast<int>(section_pair.second->get_fps()) << std::endl;
+    }
+    std::cout << "======================" << std::endl;
+}
+
+void ServerBase::fps_monitor_thread_work()
+{
+    while (is_running() == true)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(server_fps_check_interval));
+        
+        print_fps_info();
     }
 }
 
