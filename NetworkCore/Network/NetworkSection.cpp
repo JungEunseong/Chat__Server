@@ -99,6 +99,9 @@ void NetworkSection::section_thread_work()
 {
     while(m_owner->is_running() == true)
     {
+        if (performance_check_mode)
+            update_fps_info();
+        
         if(m_task_queue.empty()) 
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -116,11 +119,7 @@ void NetworkSection::section_thread_work()
 
         task->func();
 
-        // 실제 작업을 처리했을 때만 FPS 카운트
-        if (performance_check_mode)
-            update_fps_info();
-
-        if(task->is_repeat)
+         if(task->is_repeat)
         {
             task->execute_time = std::chrono::steady_clock::now() + std::chrono::microseconds(task->delay_time);
             m_task_queue.push(task);
