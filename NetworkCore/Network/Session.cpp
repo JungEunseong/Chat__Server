@@ -114,6 +114,13 @@ void Session::complete_recieve(int bytes_transferred)
         return;
     }
 
+    if (performance_check_mode)
+    {
+        ClientSession* client_session = dynamic_cast<ClientSession*>(this);
+        if (client_session != nullptr && client_session->get_section() != nullptr)
+            client_session->get_section()->increment_recv_count_for_tps();
+    }
+
     if (false == m_recv_buffer.OnWrite(bytes_transferred))
     {
         // TODO: LOG

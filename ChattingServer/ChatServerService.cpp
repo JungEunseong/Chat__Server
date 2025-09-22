@@ -7,7 +7,8 @@ void ChatServerService::init(int iocp_thread_count, int section_count)
 
     m_lobby = xnew Lobby;
     m_lobby->init(this, NetworkSection::generate_section_id());
-    
+
+    m_sections.emplace(m_lobby->get_id(), m_lobby);
 }
 
 void ChatServerService::on_iocp_io(NetworkIO* io, int bytes_transferred)

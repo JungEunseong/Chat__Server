@@ -132,16 +132,39 @@ double ServerBase::get_fps_avg()
     return (active_sections > 0) ? total_fps / active_sections : 0;
 }
 
-void ServerBase::print_fps_info()
+double ServerBase::get_tps_avg()
 {
-    std::cout << "=== Server FPS Info ===" << std::endl;
-    std::cout << "Average FPS: " << static_cast<int>(get_fps_avg()) << std::endl;
+    if (m_sections.empty()) 
+        return 0;
+    
+    double total_tps = 0;
+    int active_sections = 0;
     
     for (auto& section_pair : m_sections)
     {
-        std::cout << "Section " << section_pair.first << " FPS: " << static_cast<int>(section_pair.second->get_fps()) << std::endl;
+        double section_tps = section_pair.second->get_recv_tps();
+        if (section_tps > 0)
+        {
+            total_tps += section_tps;
+            active_sections++;
+        }
     }
-    std::cout << "======================" << std::endl;
+    
+    return (active_sections > 0) ? total_tps / active_sections : 0;
+}
+
+void ServerBase::print_fps_info()
+{
+    std::cout << "=== Server Performance Info ===" << std::endl;
+    std::cout << "Average FPS: " << static_cast<int>(get_fps_avg()) << std::endl;
+    std::cout << "Average TPS: " << static_cast<int>(get_tps_avg()) << std::endl;
+    
+    for (auto& section_pair : m_sections)
+    {
+        std::cout << "Section " << section_pair.first << " FPS: " << static_cast<int>(section_pair.second->get_fps()) 
+                  << ", Recv TPS: " << section_pair.second->get_recv_tps() << std::endl;
+    }
+    std::cout << "===============================" << std::endl;
 }
 
 void ServerBase::fps_monitor_thread_work()

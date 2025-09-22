@@ -6,10 +6,13 @@ void NetworkSection::init(ServerBase* owner, int section_id)
     m_owner = owner;
     m_section_id = section_id;
     
-    // FPS 측정 초기화
     m_last_frame_time = std::chrono::high_resolution_clock::now();
     m_frame_count = 0;
     m_current_fps = 0;
+    
+    m_last_recv_tps_time = std::chrono::high_resolution_clock::now();
+    m_recv_count = 0;
+    m_current_recv_tps = 0;
     
     m_section_thread= std::thread([this](){ section_thread_work(); });
 }
@@ -100,7 +103,10 @@ void NetworkSection::section_thread_work()
     while(m_owner->is_running() == true)
     {
         if (performance_check_mode)
+        {
             update_fps_info();
+            update_recv_tps_info();
+        }
         
         if(m_task_queue.empty()) 
         {
@@ -143,4 +149,22 @@ void NetworkSection::update_fps_info()
         m_frame_count = 0;
         m_last_frame_time = current_time;
     }
+}
+
+void NetworkSection::update_recv_tps_info()
+{
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto delta_time = std::chrono::duration<double>(current_time - m_last_recv_tps_time).count();
+        
+    if (delta_time >= 1.0) // 1초마다 TPS 업데이트
+    {
+        int recv_count = m_recv_count.exchange(0);
+        m_current_recv_tps = recv_count / delta_time;
+        m_last_recv_tps_time = current_time;
+    }
+}
+
+void NetworkSection::increment_recv_count_for_tps()
+{
+    m_recv_count.fetch_add(1);
 }

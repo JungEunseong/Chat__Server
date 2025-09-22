@@ -12,6 +12,7 @@ public:
     void add_section(class NetworkSection* section);
     
     double get_fps_avg();
+    double get_tps_avg();
     void print_fps_info();
 
 public:
@@ -25,7 +26,7 @@ protected:
     void on_iocp_io(NetworkIO* io, int bytes_transferred) override;
     virtual NetworkSection* select_first_section() abstract;
 
-private:
+protected:
     SOCKET m_listen_socket;
     
     std::thread m_central_thread;

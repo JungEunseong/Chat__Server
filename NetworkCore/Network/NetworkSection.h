@@ -42,6 +42,9 @@ private:
 public:
     double get_fps() const { return m_current_fps; }
     void update_fps_info();
+    double get_recv_tps() const { return m_current_recv_tps; }
+    void update_recv_tps_info();
+    void increment_recv_count_for_tps();
     
 private:
     unsigned int m_section_id;
@@ -56,4 +59,9 @@ private:
     std::chrono::high_resolution_clock::time_point m_last_frame_time;
     int m_frame_count;
     double m_current_fps;
+    
+    // TPS 측정 관련
+    std::chrono::high_resolution_clock::time_point m_last_recv_tps_time;
+    std::atomic<int> m_recv_count;
+    double m_current_recv_tps;
 };
