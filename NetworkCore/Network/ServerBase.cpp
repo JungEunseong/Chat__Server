@@ -9,7 +9,13 @@ void ServerBase::init(int iocp_thread_count, int section_count)
     NetworkCore::init(iocp_thread_count);
 
     if (performance_check_mode)
+    {
+        m_last_accept_tps_time = std::chrono::high_resolution_clock::now();
+        m_accept_count = 0;
+        m_current_accept_tps = 0;
+        
         m_performance_monitor_thread = std::thread(&ServerBase::fps_monitor_thread_work, this);
+    }
     
     m_central_thread = std::thread(&ServerBase::central_thread_work, this); 
     
@@ -49,6 +55,9 @@ void ServerBase::open(std::string open_ip, int open_port, std::function<ClientSe
 }
 
 void ServerBase::on_accept(int bytes_transferred, NetworkIO* io) {
+    
+    if (performance_check_mode)
+        increment_accept_count_for_tps();
     
     AcceptIO* accept_io = reinterpret_cast<AcceptIO*>(io);
 
@@ -172,10 +181,30 @@ double ServerBase::get_send_tps_avg()
     }
     return (active_sections > 0) ? total_tps / active_sections : 0;
 }
+
+void ServerBase::update_accept_tps_info()
+{
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto delta_time = std::chrono::duration<double>(current_time - m_last_accept_tps_time).count();
+        
+    if (delta_time >= 1.0) // 1초마다 TPS 업데이트
+    {
+        int accept_count = m_accept_count.exchange(0);
+        m_current_accept_tps = accept_count / delta_time;
+        m_last_accept_tps_time = current_time;
+    }
+}
+
+void ServerBase::increment_accept_count_for_tps()
+{
+    m_accept_count.fetch_add(1);
+}
+
 void ServerBase::print_fps_info()
 {
     std::cout << "=== Server Performance Info ===" << std::endl;
     std::cout << "Average FPS: " << static_cast<int>(get_fps_avg()) << std::endl;
+    std::cout << "Accept TPS: " << static_cast<int>(get_accept_tps()) << std::endl;
     std::cout << "Average RECV TPS: " << static_cast<int>(get_recv_tps_avg()) << std::endl;
     std::cout << "Average SEND TPS: " << static_cast<int>(get_send_tps_avg()) << std::endl;
     
@@ -194,6 +223,7 @@ void ServerBase::fps_monitor_thread_work()
     {
         std::this_thread::sleep_for(std::chrono::seconds(server_fps_check_interval));
         
+        update_accept_tps_info();
         print_fps_info();
     }
 }

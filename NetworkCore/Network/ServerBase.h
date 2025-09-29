@@ -15,6 +15,10 @@ public:
     double get_recv_tps_avg();
     double get_send_tps_avg();
     void print_fps_info();
+    
+    double get_accept_tps() const { return m_current_accept_tps; }
+    void update_accept_tps_info();
+    void increment_accept_count_for_tps();
 
 public:
     void on_accept(int bytes_transferred, NetworkIO* io);
@@ -35,4 +39,9 @@ protected:
 
     std::map<unsigned int, class NetworkSection*> m_sections;
     std::function<class ClientSession*()> m_session_factory;
+    
+    // Accept TPS 측정 관련
+    std::chrono::high_resolution_clock::time_point m_last_accept_tps_time;
+    std::atomic<int> m_accept_count;
+    double m_current_accept_tps;
 };
