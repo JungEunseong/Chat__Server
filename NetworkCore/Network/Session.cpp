@@ -19,7 +19,6 @@ void Session::finalize()
     m_remote_ip = "";
     m_remote_port = 0;
     m_multi_sender.clear();
-
 }
 
 bool Session::do_connect()

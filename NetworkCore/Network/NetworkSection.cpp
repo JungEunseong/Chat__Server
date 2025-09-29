@@ -5,18 +5,21 @@ void NetworkSection::init(ServerBase* owner, int section_id)
 {
     m_owner = owner;
     m_section_id = section_id;
+
+    if (performance_check_mode)
+    {
+        m_last_frame_time = std::chrono::high_resolution_clock::now();
+        m_frame_count = 0;
+        m_current_fps = 0;
     
-    m_last_frame_time = std::chrono::high_resolution_clock::now();
-    m_frame_count = 0;
-    m_current_fps = 0;
+        m_last_recv_tps_time = std::chrono::high_resolution_clock::now();
+        m_recv_count = 0;
+        m_current_recv_tps = 0;
     
-    m_last_recv_tps_time = std::chrono::high_resolution_clock::now();
-    m_recv_count = 0;
-    m_current_recv_tps = 0;
-    
-    m_last_send_tps_time = std::chrono::high_resolution_clock::now();
-    m_send_count = 0;
-    m_current_send_tps = 0;
+        m_last_send_tps_time = std::chrono::high_resolution_clock::now();
+        m_send_count = 0;
+        m_current_send_tps = 0;
+    }
     
     m_section_thread= std::thread([this](){ section_thread_work(); });
 }

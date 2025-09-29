@@ -13,7 +13,7 @@ public:
     virtual ~Session()
     {
         finalize();
-    };
+    }
 
 public:
     static int generate_session_id();
