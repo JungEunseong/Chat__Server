@@ -12,7 +12,8 @@ public:
     void add_section(class NetworkSection* section);
     
     double get_fps_avg();
-    double get_tps_avg();
+    double get_recv_tps_avg();
+    double get_send_tps_avg();
     void print_fps_info();
 
 public:

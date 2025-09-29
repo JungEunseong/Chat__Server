@@ -14,6 +14,10 @@ void NetworkSection::init(ServerBase* owner, int section_id)
     m_recv_count = 0;
     m_current_recv_tps = 0;
     
+    m_last_send_tps_time = std::chrono::high_resolution_clock::now();
+    m_send_count = 0;
+    m_current_send_tps = 0;
+    
     m_section_thread= std::thread([this](){ section_thread_work(); });
 }
 
@@ -106,6 +110,7 @@ void NetworkSection::section_thread_work()
         {
             update_fps_info();
             update_recv_tps_info();
+            update_send_tps_info();
         }
         
         if(m_task_queue.empty()) 
@@ -167,4 +172,22 @@ void NetworkSection::update_recv_tps_info()
 void NetworkSection::increment_recv_count_for_tps()
 {
     m_recv_count.fetch_add(1);
+}
+
+void NetworkSection::update_send_tps_info()
+{
+    auto current_time = std::chrono::high_resolution_clock::now();
+    auto delta_time = std::chrono::duration<double>(current_time - m_last_send_tps_time).count();
+        
+    if (delta_time >= 1.0) // 1초마다 TPS 업데이트
+    {
+        int send_count = m_send_count.exchange(0);
+        m_current_send_tps = send_count / delta_time;
+        m_last_send_tps_time = current_time;
+    }
+}
+
+void NetworkSection::increment_send_count_for_tps()
+{
+    m_send_count.fetch_add(1);
 }

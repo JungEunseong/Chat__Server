@@ -45,6 +45,9 @@ public:
     double get_recv_tps() const { return m_current_recv_tps; }
     void update_recv_tps_info();
     void increment_recv_count_for_tps();
+    double get_send_tps() const { return m_current_send_tps; }
+    void update_send_tps_info();
+    void increment_send_count_for_tps();
     
 private:
     unsigned int m_section_id;
@@ -64,4 +67,8 @@ private:
     std::chrono::high_resolution_clock::time_point m_last_recv_tps_time;
     std::atomic<int> m_recv_count;
     double m_current_recv_tps;
+    
+    std::chrono::high_resolution_clock::time_point m_last_send_tps_time;
+    std::atomic<int> m_send_count;
+    double m_current_send_tps;
 };

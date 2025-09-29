@@ -68,6 +68,13 @@ bool Session::do_recieve()
 
 bool Session::do_send(std::shared_ptr<Packet> packet)
 {
+    if (performance_check_mode)
+    {
+        ClientSession* client_session = dynamic_cast<ClientSession*>(this);
+        if (client_session && client_session->get_section())
+            client_session->get_section()->increment_send_count_for_tps();
+    }
+    
     m_multi_sender.register_packet(packet);
     return true;
 }
